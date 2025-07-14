@@ -25,6 +25,11 @@ class GModAuth
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        //$requestIp = $request->ip();
+       //if ($server->ip && $server->ip !== $requestIp) {
+        //    return response()->json(['message' => 'IP mismatch'], 403);
+        //}
+
         $server->update(['last_seen_at' => now()]);
         // Optional: attach server to request for later use
         $request->merge(['gmod_server' => $server]);
