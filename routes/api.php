@@ -17,7 +17,7 @@ Route::get("areas", "GmodServersController@retrieve");
 
 Route::prefix('garrysmod')->middleware('gmod.auth')->group(function () {
     Route::get('/servers', "GmodServersController@retrieve");
-    Route::post('/ping', "GmodServersController@retrieve");
+    //Route::post('/ping', "GmodServersController@retrieve");
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
