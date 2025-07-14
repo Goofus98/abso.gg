@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GmodServers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GmodServersController extends Controller
 {
@@ -21,5 +22,19 @@ class GmodServersController extends Controller
         }
 
         return $output;
+    }
+
+    public function register(Request $request)
+    {
+        $server = GModServer::create([
+            'name' => $request->input('name'),
+            'ip' => $request->ip(),
+            'api_key' => Str::random(64), // Generate the API key here
+        ]);
+
+        return response()->json([
+            'message' => 'Server registered',
+            'api_key' => $server->api_key,
+        ]);
     }
 }

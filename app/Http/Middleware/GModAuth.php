@@ -19,11 +19,13 @@ class GModAuth
     public function handle(Request $request, Closure $next)
     {
         $apiKey = $request->header('X-API-KEY');
+        $server = GmodServers::where('api_key', $apiKey)->first();
 
-        if (!$apiKey || !$server = GmodServers::where('api_key', $apiKey)->first()) {
+        if (! $server) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        $server->update(['last_seen_at' => now()]);
         // Optional: attach server to request for later use
         $request->merge(['gmod_server' => $server]);
 
