@@ -14,7 +14,8 @@ class GmodServersFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->sentence(3),
+            'api_key' => $this->faker->sentence(3),
         ];
     }
 }

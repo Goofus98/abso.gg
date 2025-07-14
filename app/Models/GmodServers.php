@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class GmodServers extends Model
 {
     use HasFactory;
+
+    protected $fillable = ["name", "api_key"];
 }
