@@ -15,6 +15,10 @@ class CreateGmodServersTable extends Migration
     {
         Schema::create('gmod_servers', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->ipAddress('ip')->nullable();
+            $table->string('api_key')->unique();
+            $table->timestamp('last_seen_at')->nullable();
             $table->timestamps();
         });
     }
