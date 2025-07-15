@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get("areas", "GmodServersController@retrieve");
 
 Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
-    Route::post('gpshop/auction-item', "GmodServersController@retrieve");
+    Route::post('gpshop/auction-item', "GPShopController@auction");
 });
 
-Route::get('/auth/player-token', "JwtAuthController@issue")->middleware('gmod.auth');
-Route::get('/auth/player-token-status', "JwtAuthController@status")->middleware('gmod.auth');;
+Route::get('/auth/player-token', "JwtAuthController@issue");//->middleware('gmod.auth');
+Route::get('/auth/player-token-status', "JwtAuthController@status")->middleware('gmod.auth');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

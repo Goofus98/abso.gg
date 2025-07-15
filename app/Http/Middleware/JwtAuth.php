@@ -10,7 +10,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
 
-class JwtAuthMiddleware
+class JwtAuth
 {
     public function handle(Request $request, Closure $next)
     {
