@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get("areas", "GmodServersController@retrieve");
 
-Route::prefix('garrysmod')->middleware('gmod.auth')->group(function () {
-    Route::get('/servers', "GmodServersController@retrieve");
-    //Route::post('/ping', "GmodServersController@retrieve");
+Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
+    Route::post('gpshop/auction-item', "GmodServersController@retrieve");
 });
+
+Route::get('/auth/player-token', "JwtAuthController@issue")->middleware('gmod.auth');
+Route::get('/auth/player-token-status', "JwtAuthController@status")->middleware('gmod.auth');;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
