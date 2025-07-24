@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Throwable;
 //use App\Models\AuctionItem;
 
 class GPShopService
