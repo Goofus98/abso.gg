@@ -43,6 +43,14 @@ class ProcessGPShopAuctions extends Command
 
         return crc32($seed);
     }
+
+    public function generatePurchaseData($auction) {
+        return json_encode([
+            'Time' => time(), // Unix timestamp, same as os.time()
+            'Currency' => 'GP',
+            'Amount' => $auction->OriginalMarketPriceGP ?? 0
+        ]);
+    }
     /**
      * Execute the console command.
      *
@@ -85,7 +93,7 @@ class ProcessGPShopAuctions extends Command
                                 'Type' => $auction->Type,
                                 'Equipped' => 0,
                                 'Mods' => $auction->Mods,
-                                'PurchaseData' => $auction->PurchaseData,
+                                'PurchaseData' => $this->generatePurchaseData($auction),
                             ]);
 
                         //Add GP to the seller
@@ -101,6 +109,7 @@ class ProcessGPShopAuctions extends Command
                             'ItemID' => $auction->ItemID,
                             'UID' => $auction->UID,
                             'NewUID' => $uid,
+                            'OriginalMarketPriceGP'=> $auction->OriginalMarketPriceGP,
                             'Type' => $auction->Type,
                             'FinalPrice' => $auction->CurrentBid,
                             'Duration' => $auction->Duration,
@@ -137,6 +146,7 @@ class ProcessGPShopAuctions extends Command
                             'ItemID' => $auction->ItemID,
                             'UID' => $auction->UID,
                             'Type' => $auction->Type,
+                            'OriginalMarketPriceGP'=> $auction->OriginalMarketPriceGP,
                             'Price' => $auction->StartingBid,
                             'Duration' => $auction->Duration,
                             'PurchaseData' => $auction->PurchaseData,
@@ -172,6 +182,7 @@ class ProcessGPShopAuctions extends Command
                         'ItemID' => $auction->ItemID,
                         'UID' => $auction->UID,
                         'Type' => $auction->Type,
+                        'OriginalMarketPriceGP'=> $auction->OriginalMarketPriceGP,
                         'Price' => $auction->StartingBid,
                         'Duration' => $auction->Duration,
                         'PurchaseData' => $auction->PurchaseData,
