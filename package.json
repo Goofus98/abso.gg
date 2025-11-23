@@ -1,7 +1,7 @@
 {
     "private": true,
-    "scripts": {
-    },
-    "devDependencies": {
+    "scripts": {},
+    "dependencies": {
+        "nuxt": "^2.18.1"
     }
 }
