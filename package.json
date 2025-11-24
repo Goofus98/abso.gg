@@ -1,6 +1,5 @@
 {
     "private": true,
-
     "name": "abso.gg",
     "scripts": {
         "dev": "nuxt",
@@ -10,6 +9,11 @@
         "start": "nuxt start"
     },
     "dependencies": {
-        "nuxt": "^2.18.1"
+        "@nuxt/types": "^2.18.1",
+        "@nuxt/typescript-build": "^3.0.2",
+        "@types/node": "^24.10.1",
+        "nuxt": "^2.18.1",
+        "vue-class-component": "^7.2.6",
+        "vue-property-decorator": "^9.1.2"
     }
 }
