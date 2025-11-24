@@ -13,7 +13,7 @@ export default {
 
     css: [],
 
-    plugins: [],
+    plugins: ["plugins/nuxt-axios-exporter.ts"],
 
     components: true,
 
@@ -22,7 +22,7 @@ export default {
         "@nuxtjs/vuetify"
     ],
 
-    modules: [],
+    modules: [ "@nuxtjs/axios"],
 
     build: {
         publicPath: process.env.NODE_ENV === 'production' ? 'assets/' : null,
