@@ -9,6 +9,16 @@ export default {
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
             {hid: 'description', name: 'description', content: 'For people looking for the best GMod Servers'}
         ],
+        link: [
+            {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
+            },
+            {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
+            }
+        ],
     },
 
     css: [],
