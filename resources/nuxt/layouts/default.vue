@@ -1,21 +1,43 @@
 <template>
-  <div>
+  <v-app>
     <navbar />
-    <Nuxt />
-  </div>
+
+    <v-main class="main-background">
+      <Nuxt />
+    </v-main>
+  </v-app>
 </template>
 
-<script lang="ts">
-import {Vue, Component} from "vue-property-decorator";
-/*import NavBar from '../components/navbar.vue'
+<script>
+  import Vuetify from 'vuetify'
 
-@Component({
-    components: {
-        NavBar
+
+  export default {
+      head() {
+      return {
+        link: [
+          {
+            rel: 'stylesheet',
+            href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
+          }
+        ]
+      }
+    },
+    mounted () {
+      this.$vuetify.theme.dark = true
     }
-})*/
 
-@Component
-export default class IndexClass extends Vue {
-}
+  }
 </script>
+
+<style>
+.main-background {
+  background-image: url('/images/bg.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+
+</style>

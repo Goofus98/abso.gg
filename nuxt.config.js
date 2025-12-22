@@ -1,5 +1,5 @@
 export default {
-    ssr: false,
+    ssr: true,
     srcDir: 'resources/nuxt/',
 
     head: {
@@ -8,7 +8,7 @@ export default {
             {charset: 'utf-8'},
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
             {hid: 'description', name: 'description', content: 'For people looking for the best GMod Servers'}
-        ],
+        ]/*,
         link: [
             {
                 rel: "stylesheet",
@@ -18,7 +18,7 @@ export default {
                 rel: "stylesheet",
                 href: "https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css",
             }
-        ],
+        ],*/
     },
 
     css: [],
@@ -29,8 +29,14 @@ export default {
 
     buildModules: [
         "@nuxt/typescript-build",
-        "@nuxtjs/vuetify"
+        ['@nuxtjs/vuetify', { defaultAssets: true, treeShake: true }]
     ],
+
+    vuetify: {
+        theme: {
+        dark: true
+        }
+    },
 
     modules: [ "@nuxtjs/axios"],
 
@@ -41,6 +47,10 @@ export default {
 
     generate: {
         dir: 'nuxt-public',
+        exclude: [
+            //'/bans'
+            ///^\/bans/ // path starts with /admin
+        ]
     },
 
     server: {
