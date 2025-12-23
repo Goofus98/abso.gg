@@ -18,6 +18,8 @@ class CreateGmodServersTable extends Migration
             $table->string('name');
             $table->ipAddress('ip')->nullable();
             $table->unsignedInteger('port')->nullable();
+            $table->unsignedInteger('online')->default(0);
+            $table->unsignedInteger('max_online')->default(128);
             $table->string('api_key')->unique();
             $table->timestamp('last_seen_at')->nullable();
             $table->timestamps();

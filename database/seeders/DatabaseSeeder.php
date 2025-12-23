@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $server = GmodServers::registerServer('Soku Windows LAN', '192.168.30.1');
+        $server = GmodServers::registerServer('Soku Windows LAN', '193.243.190.126', 27044);
         //GmodServers::factory(5)->create();
     }
 }

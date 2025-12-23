@@ -11,13 +11,14 @@ class GmodServers extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "api_key", "last_seen_at"];
+    protected $fillable = ["name", "online", "max_online". "api_key", "last_seen_at"];
 
-    public static function registerServer($name, $ip = null)
+    public static function registerServer($name, $ip = null, $port = null)
     {
         return self::create([
             'name' => $name,
             'ip' => $ip,
+            'port' => $port,
             'api_key' => Str::random(64),
         ]);
     }
