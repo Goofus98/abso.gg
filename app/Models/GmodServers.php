@@ -11,7 +11,7 @@ class GmodServers extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "online", "max_online"];
+    protected $fillable = ["name", "online", "gamemode", "map", "max_online"];
 
     public static function registerServer($name, $ip = null, $port = null)
     {

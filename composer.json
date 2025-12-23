@@ -26,12 +26,22 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "classmap": [
+
+            "app/Libraries",
+            "app/Libraries/SteamID"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+
+            "app/Libraries",
+            "app/Libraries/SteamID"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

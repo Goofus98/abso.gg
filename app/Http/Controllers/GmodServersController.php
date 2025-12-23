@@ -16,7 +16,10 @@ class GmodServersController extends Controller
         foreach ($areas as $area) {
             $area_data = array(
                 "name" => $area->name,
-                "api_key" => $area->api_key,
+                "ip" => $area->ip,
+                "port" => $area->port,
+                "online" => $area->online,
+                "max_online" => $area->max_online
             );;
             $output[] = $area_data;
         }

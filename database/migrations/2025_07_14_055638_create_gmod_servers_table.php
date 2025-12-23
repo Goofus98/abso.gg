@@ -20,6 +20,8 @@ class CreateGmodServersTable extends Migration
             $table->unsignedInteger('port')->nullable();
             $table->unsignedInteger('online')->default(0);
             $table->unsignedInteger('max_online')->default(128);
+            $table->string('gamemode')->default("sandbox");
+            $table->string('map')->default("gm_flatgrass");
             $table->timestamps();
         });
     }
