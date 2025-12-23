@@ -30,4 +30,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'gmod' => [
+        'api_key' => env('GMOD_WEB_API_KEY'),
+    ],
 ];

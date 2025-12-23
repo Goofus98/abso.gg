@@ -19,20 +19,21 @@ class GModAuth
     public function handle(Request $request, Closure $next)
     {
         $apiKey = $request->header('X-API-KEY');
-        $server = GmodServers::where('api_key', $apiKey)->first();
+        //$server = GmodServers::where('api_key', $apiKey)->first();
 
-        if (! $server) {
+        if ($apiKey !== config('services.gmod.api_key')) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
+
 
         //$requestIp = $request->ip();
        //if ($server->ip && $server->ip !== $requestIp) {
         //    return response()->json(['message' => 'IP mismatch'], 403);
         //}
 
-        $server->update(['last_seen_at' => now()]);
+        //$server->update(['last_seen_at' => now()]);
         // Optional: attach server to request for later use
-        $request->merge(['gmod_server' => $server]);
+        //$request->merge(['gmod_server' => $server]);
 
         return $next($request);
     }
