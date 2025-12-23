@@ -1,4 +1,5 @@
 <template>
+<client-only>
   <v-container fluid id="dash-container">
     <div class="carousel-wrapper">
         <v-carousel
@@ -7,12 +8,12 @@
         hide-delimiters
         :show-arrows="false"
         >
-        <v-carousel-item
-            transition="fade-transition"
-            v-for="(item, i) in items"
-            :key="i"
+        <v-carousel-item v-for="(item, i) in items" :key="i">
+            <v-img
             :src="item.src"
-        />
+            eager
+            />
+        </v-carousel-item>
         </v-carousel>
         <!-- Blur layer -->
         <div class="carousel-blur"></div>
@@ -110,7 +111,7 @@
                 </v-img>
                 </v-card>
             </v-col>
-
+             
             <!-- Danktown -->
             <v-col cols="12" sm="6" md="4">
                 <v-card class="server-card" tile>
@@ -129,50 +130,73 @@
                 </v-card>
             </v-col>
 
+            <v-col cols="12" sm="6" md="4" v-for="(item, i) in ServerStats" :key="i">
+                <v-card class="server-card" tile>
+                <v-img src="/images/danktown.jpg" height="220">
+                    <div class="server-overlay">
+                    <div class="server-title">{{ item.name }}</div>
+                    <div class="server-footer">
+                        <div class="server-left">
+                        <span class="status-dot"></span>
+                        <span>{{ item.ip }}:{{ item.port }}</span>
+                        </div>
+                        <div>{{ item.online }}/{{ item.max_online }}</div>
+                    </div>
+                    </div>
+                </v-img>
+                </v-card>
+            </v-col>
+
             </v-row>
         </v-col>
         </v-row>
 
     </v-container>
   </v-container>
+</client-only>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
-import JankModule from "../store/jank";
+import GModServersModule from "../store/gmodServers";
 
 @Component
 export default class IndexClass extends Vue {
   thing = 69;
-  jankmodule: JankModule | null = null;
+  gmodServerModule: GModServersModule = null!;
+  ServerStats = [];
     items = [
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+            src: '/images/landing001.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+            src: '/images/landing002.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+            src: '/images/landing003.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+            src: '/images/landing004.jpg',
+        },
+        {
+            src: '/images/landing005.jpg',
+        },
+        {
+            src: '/images/landing006.jpg',
         }
     ];
   async created() {
-    const data = await this.$axios.$get("http://abso.gg/api/areas");
-    console.log(data);
+    this.ServerStats = await this.$axios.$get(`${this.$config.apiUrl}/api/areas`);
+    console.log("data");
+    console.log(this.ServerStats);
 
-    this.jankmodule = getModule(JankModule, this.$store);
-    await this.jankmodule.goPP();
+    this.gmodServerModule = getModule(GModServersModule, this.$store);
+    await this.gmodServerModule.initalize();
   }
 
   get jank() {
-    if (this.jankmodule == null) {
-      return "";
-    }
-    return this.jankmodule.variable;
+    return this.gmodServerModule.gmServers;
   }
 
 }

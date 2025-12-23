@@ -17,14 +17,14 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
-  resolveStoreModules(require('../resources/nuxt/store/jank.ts'), 'jank.ts')
+  resolveStoreModules(require('../resources/nuxt/store/gmodServers.ts'), 'gmodServers.ts')
 
   // If the environment supports hot reloading...
 
   if (process.client && module.hot) {
     // Whenever any Vuex module is updated...
     module.hot.accept([
-      '../resources/nuxt/store/jank.ts',
+      '../resources/nuxt/store/gmodServers.ts',
     ], () => {
       // Update `root.modules` with the latest definitions.
       updateModules()

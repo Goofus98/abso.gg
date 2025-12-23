@@ -12,16 +12,19 @@ class GmodServersController extends Controller
         $areas = GmodServers::all();
 
         $output = [];
-
+        $output["servers"] = [];
         foreach ($areas as $area) {
             $area_data = array(
+                "id" => $area->id,
                 "name" => $area->name,
                 "ip" => $area->ip,
                 "port" => $area->port,
+                "map" => $area->map,
+                "gamemode" => $area->gamemode,
                 "online" => $area->online,
                 "max_online" => $area->max_online
             );;
-            $output[] = $area_data;
+             $output["servers"][] = $area_data;
         }
 
         return $output;
