@@ -64,4 +64,8 @@ export default {
             poll: 500,
         },
     },
+    publicRuntimeConfig: {
+        discordUrl: process.env.DISCORD_URL,
+        apiUrl: process.env.APP_URL
+    },
 }

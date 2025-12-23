@@ -1,4 +1,5 @@
 <template>
+<client-only>
   <v-container fluid id="dash-container">
     <div class="carousel-wrapper">
         <v-carousel
@@ -7,12 +8,12 @@
         hide-delimiters
         :show-arrows="false"
         >
-        <v-carousel-item
-            transition="fade-transition"
-            v-for="(item, i) in items"
-            :key="i"
+        <v-carousel-item v-for="(item, i) in items" :key="i">
+            <v-img
             :src="item.src"
-        />
+            eager
+            />
+        </v-carousel-item>
         </v-carousel>
         <!-- Blur layer -->
         <div class="carousel-blur"></div>
@@ -135,6 +136,7 @@
 
     </v-container>
   </v-container>
+</client-only>
 </template>
 
 <script lang="ts">
@@ -148,20 +150,27 @@ export default class IndexClass extends Vue {
   jankmodule: JankModule | null = null;
     items = [
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+            src: '/images/landing001.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+            src: '/images/landing002.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+            src: '/images/landing003.jpg',
         },
         {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+            src: '/images/landing004.jpg',
+        },
+        {
+            src: '/images/landing005.jpg',
+        },
+        {
+            src: '/images/landing006.jpg',
         }
     ];
   async created() {
-    const data = await this.$axios.$get("http://abso.gg/api/areas");
+    const data = await this.$axios.$get(`${this.$config.apiUrl}/api/areas`);
+    console.log("data");
     console.log(data);
 
     this.jankmodule = getModule(JankModule, this.$store);

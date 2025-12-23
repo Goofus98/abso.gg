@@ -11,7 +11,7 @@
       <v-btn text tile height="100%" class="nav-btn" to="/news">News</v-btn>
       <v-btn text tile height="100%" class="nav-btn" to="/wiki">Wiki</v-btn>
       <v-btn text tile height="100%" class="nav-btn" href="https://store.steampowered.com">Steam</v-btn>
-      <v-btn text tile height="100%" class="nav-btn" href="https://store.steampowered.com">Discord</v-btn>
+      <v-btn text tile height="100%" class="nav-btn" :href="$config.discordUrl">Discord</v-btn>
       <v-btn text tile height="100%" class="nav-btn" to="/staff">Staff</v-btn>
       <v-btn text tile height="100%" class="nav-btn" to="/bans">Bans</v-btn>
       <v-btn text tile height="100%" class="nav-btn" to="/donate">Donate</v-btn>
@@ -85,8 +85,9 @@
 }
 
 .steam-login {
-  height: 54px;
-  margin-right: 128px;
+  height: 50px;
+  margin-top: 8px;
+  margin-right: 20vw;
   display: block;
   cursor: pointer;
 }

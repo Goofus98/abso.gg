@@ -1,8 +1,7 @@
 <template>
   <v-app>
     <navbar />
-
-    <v-main class="main-background">
+    <v-main>
       <Nuxt />
     </v-main>
   </v-app>
@@ -31,13 +30,14 @@
 </script>
 
 <style>
-.main-background {
+html, body {
+  overflow: auto !important 
+}
+
+main {
   background-image: url('/images/bg.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
-
-
-
 </style>
