@@ -11,7 +11,7 @@ class GmodServers extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "online", "max_online". "api_key", "last_seen_at"];
+    protected $fillable = ["name", "online", "max_online"];
 
     public static function registerServer($name, $ip = null, $port = null)
     {
@@ -19,7 +19,7 @@ class GmodServers extends Model
             'name' => $name,
             'ip' => $ip,
             'port' => $port,
-            'api_key' => Str::random(64),
+            //'api_key' => Str::random(64),
         ]);
     }
 }
