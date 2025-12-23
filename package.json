@@ -15,6 +15,7 @@
         "@nuxtjs/vuetify": "^1.12.3",
         "@types/node": "^24.10.1",
         "nuxt": "^2.18.1",
+        "nuxt-property-decorator": "^2.9.1",
         "vue-class-component": "^7.2.6",
         "vue-property-decorator": "^9.1.2",
         "vuex-module-decorators": "^1.2.0"

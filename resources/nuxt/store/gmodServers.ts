@@ -5,11 +5,23 @@ import {GModServer, GModServerTransfer} from "../core/Entities"
 interface ApiData {
     servers: GModServerTransfer[];
 }
-@Module({namespaced: true, name: "gmodServers"})
+
+interface ServerPOJO {
+    id: number;
+    name: string;
+    ip: string;
+    port: number;
+    map: string;
+    gamemode: string;
+    online: number;
+    max_online: number;
+}
+
+@Module({namespaced: true, name: "gmodServers", stateFactory: true})
 export default class GModServersModule extends VuexModule {
     isInitialized: boolean = false;
     variable = "butts";
-    gmServers: GModServer[] = [];
+    gmServers: ServerPOJO[] = [];
     @Mutation
     private setInitialized(value: boolean) {
         this.isInitialized = value;
