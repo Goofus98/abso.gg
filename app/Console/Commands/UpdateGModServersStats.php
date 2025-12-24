@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 use App\Models\GmodServers;
 
 use Illuminate\Console\Command;
+use App\Events\GModServerStats;
 use xPaw\SourceQuery\SourceQuery;
 class UpdateGModServersStats extends Command
 {
@@ -63,6 +64,8 @@ class UpdateGModServersStats extends Command
                 $Query->Disconnect();
             }
         }
+
+        event(new GModServerStats(GmodServers::all()));
         return Command::SUCCESS;
     }
 }
