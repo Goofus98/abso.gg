@@ -39,10 +39,10 @@
                 <v-card class="stat-card">
                 <div class="stat-content">
                     <div class="stat-icon">
-                    <v-img src="/images/popcorn.png" width="100" height="100" contain />
+                    <v-img src="/images/entertainment.png" width="100" height="100" contain eager/>
                     </div>
                     <div class="stat-text">
-                    <div class="stat-value">72/767</div>
+                    <div class="stat-value">{{ onlinePlayers }}/{{ maxOnlinePlayers }}</div>
                     <div class="stat-label">PLAYERS ONLINE</div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 <v-card class="stat-card">
                 <div class="stat-content">
                     <div class="stat-icon">
-                    <v-img src="/images/entertainment.png" width="100" height="100" contain />
+                    <v-img src="/images/popcorn.png" width="100" height="100" contain eager/>
                     </div>
                     <div class="stat-text">
                     <div class="stat-value">1,482,332</div>
@@ -67,7 +67,7 @@
                 <v-card class="stat-card">
                 <div class="stat-content">
                     <div class="stat-icon">
-                    <v-img src="/images/hourglass.png" width="100" height="100" contain />
+                    <v-img src="/images/hourglass.png" width="100" height="100" contain eager/>
                     </div>
                     <div class="stat-text">
                     <div class="stat-value">2159y 2mo 2w</div>
@@ -148,7 +148,20 @@ export default class Index extends Vue {
   get gmServers() {
     return getModule(GModServersModule, this.$store).gmServers;
   }
-
+  get maxOnlinePlayers() {
+    let ret = 0;
+    for (var v of this.gmServers) {
+        ret = ret + v.max_online
+    }
+    return ret
+  }
+  get onlinePlayers() {
+    let ret = 0;
+    for (var v of this.gmServers) {
+        ret = ret + v.online
+    }
+    return ret
+  }
   // Example computed property
   get jank() {
     return this.gmServers.length ? this.gmServers : "";
@@ -264,6 +277,11 @@ export default class Index extends Vue {
 
 .server-card {
   overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.server-card:hover {
+  transform: translateY(-4px);
 }
 
 .server-overlay {
