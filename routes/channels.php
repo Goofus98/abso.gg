@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+// routes/channels.php
+Broadcast::channel('gm_live_servers', function ($user) {
+    return true; // adjust with proper auth if needed
+});

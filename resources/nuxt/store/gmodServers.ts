@@ -39,6 +39,12 @@ export default class GModServersModule extends VuexModule {
     private addServer(server: GModServer) {
         this.gmServers.push(server);
     }
+
+    @Mutation
+    public rehydrate(servers: GModServer[]) {
+        this.gmServers = servers;
+    }
+
     @Action({rawError: true})
     async initalize() {
         if (!this.isInitialized) {

@@ -124,6 +124,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import GModServersModule from "../store/gmodServers";
+import Echo from '@ably/laravel-echo'
+import * as Ably from 'ably'
 
 @Component({
   // Nuxt fetch hook (SSR-safe)
@@ -143,7 +145,31 @@ export default class Index extends Vue {
     { src: '/images/landing005.jpg' },
     { src: '/images/landing006.jpg' }
   ];
+  mounted() {
+    if (process.client) {
+        console.log("ready")
+        // Initialize Ably Realtime client
+        const ablyClient = new Ably.Realtime({
+        key: 'MIlyGQ.076daA:CJZOLpwKKqTq-ghorHRd-C7gF4FWCmg0i4jPqs7ihRc',
+        })
 
+        // Initialize Laravel Echo with Ably
+        const echo = new Echo({
+        broadcaster: 'ably',
+        client: ablyClient,
+        })
+        echo.channel('gm_live_servers')
+        .listen('.UpdateGModServerStats', (event: any) => {
+          console.log('Server update received:', event.servers)
+          const gmodServerModule = getModule(GModServersModule, this.$store);
+          gmodServerModule.rehydrate(event.servers);
+          
+          // You can update your Vuex store here
+          //const gmodServerModule = getModule(GModServersModule, this.$store)
+          //gmodServerModule.updateServer(event)
+        })
+    }
+  }
   // ✅ Getter only returns POJO state
   get gmServers() {
     return getModule(GModServersModule, this.$store).gmServers;

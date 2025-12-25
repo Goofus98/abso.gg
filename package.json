@@ -9,11 +9,13 @@
         "start": "nuxt start"
     },
     "dependencies": {
+        "@ably/laravel-echo": "^1.0.6",
         "@nuxt/types": "^2.18.1",
         "@nuxt/typescript-build": "^3.0.2",
         "@nuxtjs/axios": "^5.13.6",
         "@nuxtjs/vuetify": "^1.12.3",
         "@types/node": "^24.10.1",
+        "ably": "^1.2.50",
         "nuxt": "^2.18.1",
         "nuxt-property-decorator": "^2.9.1",
         "vue-class-component": "^7.2.6",

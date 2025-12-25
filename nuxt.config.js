@@ -66,6 +66,7 @@ export default {
     },
     publicRuntimeConfig: {
         discordUrl: process.env.DISCORD_URL,
-        apiUrl: process.env.APP_URL
+        apiUrl: process.env.APP_URL,
+        ablyKey: process.env.CLIENT_ABLY_KEY
     },
 }

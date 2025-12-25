@@ -64,8 +64,11 @@ class UpdateGModServersStats extends Command
                 $Query->Disconnect();
             }
         }
+        // Fetch your data
+        $servers = GmodServers::all();
 
-        event(new GModServerStats(GmodServers::all()));
+        // Dispatch the broadcast event
+        event(new GModServerStats($servers));
         return Command::SUCCESS;
     }
 }

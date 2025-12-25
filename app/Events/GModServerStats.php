@@ -4,7 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -13,24 +12,24 @@ use Illuminate\Queue\SerializesModels;
 class GModServerStats implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $order;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct($order)
+
+    // The data sent to frontend
+    public $servers;
+
+    public function __construct($servers)
     {
-        //
+        $this->servers = $servers;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
+    // The channel name must match what your frontend listens to
     public function broadcastOn()
     {
-        return new PrivateChannel('gm_live_servers');
+        return new Channel('gm_live_servers');
+    }
+
+    // Optional: define event name explicitly
+    public function broadcastAs()
+    {
+        return 'UpdateGModServerStats';
     }
 }
