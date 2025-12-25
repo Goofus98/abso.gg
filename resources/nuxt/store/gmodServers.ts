@@ -1,5 +1,6 @@
 import {Module, Mutation, Action, VuexModule} from "vuex-module-decorators"
 import {$axios} from "../plugins/nuxt-axios-exporter"
+import {$echo} from "../plugins/ably-echo"
 import {GModServer, GModServerTransfer} from "../core/Entities"
 
 interface ApiData {
@@ -43,6 +44,15 @@ export default class GModServersModule extends VuexModule {
     @Mutation
     public rehydrate(servers: GModServer[]) {
         this.gmServers = servers;
+    }
+
+    @Action({rawError: true})
+    subscribe() {
+        $echo.channel('gm_live_servers')
+        .listen('.UpdateGModServerStats', (event: any) => {
+          console.log('Server update received:', event.servers)
+          this.rehydrate(event.servers);
+        })
     }
 
     @Action({rawError: true})

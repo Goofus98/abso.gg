@@ -148,26 +148,8 @@ export default class Index extends Vue {
   mounted() {
     if (process.client) {
         console.log("ready")
-        // Initialize Ably Realtime client
-        const ablyClient = new Ably.Realtime({
-        key: 'MIlyGQ.076daA:CJZOLpwKKqTq-ghorHRd-C7gF4FWCmg0i4jPqs7ihRc',
-        })
-
-        // Initialize Laravel Echo with Ably
-        const echo = new Echo({
-        broadcaster: 'ably',
-        client: ablyClient,
-        })
-        echo.channel('gm_live_servers')
-        .listen('.UpdateGModServerStats', (event: any) => {
-          console.log('Server update received:', event.servers)
-          const gmodServerModule = getModule(GModServersModule, this.$store);
-          gmodServerModule.rehydrate(event.servers);
-          
-          // You can update your Vuex store here
-          //const gmodServerModule = getModule(GModServersModule, this.$store)
-          //gmodServerModule.updateServer(event)
-        })
+        const gmodServerModule = getModule(GModServersModule, this.$store);
+        gmodServerModule.subscribe();
     }
   }
   // ✅ Getter only returns POJO state

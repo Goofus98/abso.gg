@@ -23,7 +23,7 @@ export default {
 
     css: [],
 
-    plugins: ["plugins/nuxt-axios-exporter.ts"],
+    plugins: ["plugins/nuxt-axios-exporter.ts", "plugins/ably-echo.ts"],
 
     components: true,
 
