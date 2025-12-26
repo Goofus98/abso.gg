@@ -124,16 +124,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import GModServersModule from "../store/gmodServers";
-import Echo from '@ably/laravel-echo'
-import * as Ably from 'ably'
 
-@Component({
-  // Nuxt fetch hook (SSR-safe)
-  async fetch(this: Index) {
-    const gmodServerModule = getModule(GModServersModule, this.$store);
-    await gmodServerModule.initalize();
-  }
-})
+@Component
 export default class Index extends Vue {
   thing = 69;
 
@@ -147,12 +139,10 @@ export default class Index extends Vue {
   ];
   mounted() {
     if (process.client) {
-        console.log("ready")
         const gmodServerModule = getModule(GModServersModule, this.$store);
         gmodServerModule.subscribe();
     }
   }
-  // ✅ Getter only returns POJO state
   get gmServers() {
     return getModule(GModServersModule, this.$store).gmServers;
   }
@@ -170,11 +160,6 @@ export default class Index extends Vue {
     }
     return ret
   }
-  // Example computed property
-  get jank() {
-    return this.gmServers.length ? this.gmServers : "";
-  }
-}
 </script>
 
 <style scoped>

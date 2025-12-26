@@ -3,14 +3,12 @@
     "name": "bans",
     "path": "/bans",
     "component": "/var/www/html/abso.gg/resources/nuxt/pages/bans.vue",
-    "chunkName": "pages/bans",
-    "_name": "_71fbe480"
+    "chunkName": "pages/bans"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/var/www/html/abso.gg/resources/nuxt/pages/index.vue",
-    "chunkName": "pages/index",
-    "_name": "_489de806"
+    "chunkName": "pages/index"
   }
 ]
