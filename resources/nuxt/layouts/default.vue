@@ -13,17 +13,18 @@ import { getModule } from "vuex-module-decorators";
 import GModServersModule from "../store/gmodServers";
 
 @Component({
-  head() {
-    return {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
-        }
-      ]
-    }
-  },
+  //head() {
+    //return {
+      //link: [
+      //  {
+       //   rel: 'stylesheet',
+        //  href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
+       //}
+      //]
+    //}
+ // },
   async fetch(this: DefaultLayout) {
+    console.log("called");
     const gmodServerModule = getModule(GModServersModule, this.$store);
     await gmodServerModule.initalize();
   }
