@@ -23,15 +23,19 @@ import GModServersModule from "../store/gmodServers";
       //]
     //}
  // },
-  async fetch(this: DefaultLayout) {
-    console.log("called");
+  //async fetch(this: DefaultLayout) {
+    //const gmodServerModule = getModule(GModServersModule, this.$store);
+    //if (!gmodServerModule.isInitialized) {
+      //await gmodServerModule.initalize();
+    //}
+  //}
+})
+export default class DefaultLayout extends Vue {
+  async created(){
     const gmodServerModule = getModule(GModServersModule, this.$store);
     await gmodServerModule.initalize();
   }
-})
-export default class DefaultLayout extends Vue {
   mounted() {
-    // Runs client-side only
     this.$vuetify.theme.dark = true
   }
 }

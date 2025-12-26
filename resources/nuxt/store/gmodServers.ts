@@ -58,6 +58,7 @@ export default class GModServersModule extends VuexModule {
     @Action({rawError: true})
     async initalize() {
         if (!this.isInitialized) {
+            console.log("we doin it live");
             const data: ApiData = await $axios.$get("http://abso.gg/api/areas");
             const servers = data.servers.map(serverxf => GModServer.hydrate(serverxf));
             this.setServers(servers);
