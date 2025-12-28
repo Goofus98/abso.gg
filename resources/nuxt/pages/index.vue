@@ -56,7 +56,7 @@
                     <v-img src="/images/popcorn.png" width="100" height="100" contain eager/>
                     </div>
                     <div class="stat-text">
-                    <div class="stat-value">1,482,332</div>
+                    <div class="stat-value">{{ playerCount }}</div>
                     <div class="stat-label">TOTAL PLAYERS</div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     <v-img src="/images/hourglass.png" width="100" height="100" contain eager/>
                     </div>
                     <div class="stat-text">
-                    <div class="stat-value">2159y 2mo 2w</div>
+                    <div class="stat-value">{{ playTime }}</div>
                     <div class="stat-label">TOTAL TIME PLAYED</div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <span class="status-dot"></span>
                         <span>sups.gg/discord</span>
                         </div>
-                        <div>2236/∞</div>
+                        <div>{{communityStats.discord_online_user_count}}/∞</div>
                     </div>
                     </div>
                 </v-img>
@@ -124,10 +124,20 @@
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import GModServersModule from "../store/gmodServers";
+import CommunityStatsModule from "../store/communityStats";
+
 import Echo from '@ably/laravel-echo'
 import * as Ably from 'ably'
 
-@Component
+@Component({
+  async fetch(this: Index) {
+    const gmodServerModule = getModule(GModServersModule, this.$store);
+    await gmodServerModule.initalize();
+
+    const CommunStatsModule = getModule(CommunityStatsModule, this.$store);
+    await CommunStatsModule.initalize();
+  },
+})
 export default class Index extends Vue {
   thing = 69;
 
@@ -150,6 +160,37 @@ export default class Index extends Vue {
   get gmServers() {
     return getModule(GModServersModule, this.$store).gmServers;
   }
+
+  get communityStats() {
+    return getModule(CommunityStatsModule, this.$store).stats;
+  }
+
+  get playerCount() {
+    return new Intl.NumberFormat().format(this.communityStats.player_count)
+  }
+
+  get playTime() {
+    let seconds = this.communityStats.play_time;
+    const units = [
+      { label: 'y',  value: 60 * 60 * 24 * 365 },
+      { label: 'mo', value: 60 * 60 * 24 * 30 },
+      { label: 'w',  value: 60 * 60 * 24 * 7 }
+    ]
+
+    let remaining = Math.floor(seconds)
+    const parts: string[] = []
+
+    for (const unit of units) {
+      const amount = Math.floor(remaining / unit.value)
+      if (amount > 0) {
+        parts.push(`${amount}${unit.label}`)
+        remaining -= amount * unit.value
+      }
+    }
+
+    return parts.join(' ')
+  }
+
   get maxOnlinePlayers() {
     let ret = 0;
     for (var v of this.gmServers) {
