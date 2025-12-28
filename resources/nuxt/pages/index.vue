@@ -166,10 +166,16 @@ export default class Index extends Vue {
   }
 
   get playerCount() {
+    if (this.communityStats == null) {
+      return "";
+    }
     return new Intl.NumberFormat().format(this.communityStats.player_count)
   }
 
   get playTime() {
+    if (this.communityStats == null) {
+      return "";
+    }
     let seconds = this.communityStats.play_time;
     const units = [
       { label: 'y',  value: 60 * 60 * 24 * 365 },
