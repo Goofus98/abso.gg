@@ -131,6 +131,9 @@ import * as Ably from 'ably'
 
 @Component({
   async fetch(this: Index) {
+    if (process.client) {
+      await (this.$store as any).restored
+    }
     const gmodServerModule = getModule(GModServersModule, this.$store);
     await gmodServerModule.initalize();
 

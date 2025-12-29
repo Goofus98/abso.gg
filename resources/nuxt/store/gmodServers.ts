@@ -20,17 +20,14 @@ interface ServerPOJO {
 
 @Module({namespaced: true, name: "gmodServers", stateFactory: true})
 export default class GModServersModule extends VuexModule {
-    isInitialized: boolean = false;
-    variable = "butts";
+    isInitialized = false;
     gmServers: ServerPOJO[] = [];
+
     @Mutation
     private setInitialized(value: boolean) {
         this.isInitialized = value;
     }
-    @Mutation
-    set(v:string) {
-        this.variable = v;
-    }
+
     @Mutation
     private setServers(servers: GModServer[]) {
         this.gmServers = servers;
