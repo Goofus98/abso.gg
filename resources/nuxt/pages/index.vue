@@ -2,19 +2,24 @@
 
   <v-container fluid id="dash-container">
     <div class="carousel-wrapper">
-        <v-carousel
+      <v-carousel
         cycle
         height="12.5rem"
         hide-delimiters
         :show-arrows="false"
+      >
+        <v-carousel-item
+          v-for="(item, i) in items"
+          :key="i"
         >
-        <v-carousel-item v-for="(item, i) in items" :key="i">
-            <v-img
+          <v-img
             :src="item.src"
-            eager
-            />
+            height="100%"
+            position="center center"
+          />
         </v-carousel-item>
-        </v-carousel>
+      </v-carousel>
+
         <!-- Blur layer -->
         <div class="carousel-blur"></div>
 
@@ -150,7 +155,8 @@ export default class Index extends Vue {
     { src: '/images/landing003.jpg' },
     { src: '/images/landing004.jpg' },
     { src: '/images/landing005.jpg' },
-    { src: '/images/landing006.jpg' }
+    { src: '/images/landing006.jpg' },
+    { src: '/images/landing007.jpg' }
   ];
   mounted() {
     if (process.client) {
@@ -243,8 +249,8 @@ export default class Index extends Vue {
   inset: 0;
   z-index: 1;
 
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 /* DARKEN */
@@ -253,7 +259,7 @@ export default class Index extends Vue {
   inset: 0;
   z-index: 2;
 
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.3);
 }
 .carousel-overlay {
   position: absolute;
