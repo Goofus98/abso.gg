@@ -78,14 +78,14 @@
             </v-col>
             <!-- Discord -->
             <v-col cols="12" sm="6" md="4">
-                <v-card class="server-card" tile>
+                <v-card class="server-card" tile :href="$config.discordUrl">
                 <v-img src="/images/discord.jpg" height="220">
                     <div class="server-overlay">
                     <div class="server-title">Discord</div>
                     <div class="server-footer">
                         <div class="server-left">
                         <span class="status-dot"></span>
-                        <span>sups.gg/discord</span>
+                        <span>{{ discord }}</span>
                         </div>
                         <div>{{communityStats.discord_online_user_count}}/∞</div>
                     </div>
@@ -157,7 +157,14 @@ export default class Index extends Vue {
         console.log("ready")
         const gmodServerModule = getModule(GModServersModule, this.$store);
         gmodServerModule.subscribe();
+
+        const communityStatsModule = getModule(CommunityStatsModule, this.$store);
+        communityStatsModule.subscribe();
     }
+  }
+
+  get discord(){
+    return this.$config.discordUrl.replace(/^https?:\/\//, '');
   }
   // ✅ Getter only returns POJO state
   get gmServers() {

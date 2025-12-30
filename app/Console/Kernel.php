@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('gpshop:process-auctions')->everyMinute();
         $schedule->command('gmod:update-server-stats')->everyFifteenMinutes();
+        $schedule->command('gmod:update-community-stats')->everyThirtyMinutes();
     }
 
     /**

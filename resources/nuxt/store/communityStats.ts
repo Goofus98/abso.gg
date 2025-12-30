@@ -26,8 +26,8 @@ export default class CommunityStatsModule extends VuexModule {
     subscribe() {
         $echo.channel('live_community_stats')
         .listen('.UpdateCommunityStats', (event: any) => {
-          console.log('Server update received:', event.servers)
-          this.SetStats(event.servers);
+          console.log('Stats update received:', event.stats)
+          this.SetStats(event.stats);
         })
     }
 

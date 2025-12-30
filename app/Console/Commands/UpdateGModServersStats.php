@@ -67,7 +67,6 @@ class UpdateGModServersStats extends Command
                     $Query->Disconnect();
                 }
             }
-            // Fetch your data
             $servers = GmodServers::all();
 
             $cache = [];
@@ -85,8 +84,6 @@ class UpdateGModServersStats extends Command
                 );
             }
             Cache::put('gmod_server_stats', $cache, now()->addMinutes(15));
-            
-            // Dispatch the broadcast event
             event(new GModServerStats($servers));
         });
         return 0;

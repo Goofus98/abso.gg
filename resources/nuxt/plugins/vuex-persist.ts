@@ -6,14 +6,14 @@ export default ({ store }) => {
     key: 'vuex',
     storage: window.sessionStorage ,
     reducer: (state: any) => ({
-      gmodServers: {
-        gmServers: state.gmodServers.gmServers,
-        isInitialized: state.gmodServers.isInitialized,
-      },
-      communityStats: {
-        stats: state.communityStats.stats,
-        isInitialized: state.communityStats.isInitialized,
-      },
+      //gmodServers: {
+       // gmServers: state.gmodServers.gmServers,
+       // isInitialized: state.gmodServers.isInitialized,
+      //},
+      //communityStats: {
+       // stats: state.communityStats.stats,
+       // isInitialized: state.communityStats.isInitialized,
+      //},
     })
   }).plugin(store)
 }

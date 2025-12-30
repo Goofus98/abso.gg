@@ -17,7 +17,7 @@ Route::get("areas", "GmodServersController@retrieve");
 
 Route::get("servers", "GmodServersController@retrieve");
 
-Route::get("communitystats", "GmodServersController@stats");
+Route::get("communitystats", "CommunityStatsController@retrieve");
 
 Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
     Route::post('gpshop/auction-item', "GPShopController@auction");

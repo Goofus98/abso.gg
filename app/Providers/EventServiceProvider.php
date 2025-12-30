@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         GModServerStats::class => [
             UpdateGModServerStats::class,
         ],
+        CommunityStats::class => [
+            UpdateCommunityStats::class,
+        ],
     ];
 
     /**
