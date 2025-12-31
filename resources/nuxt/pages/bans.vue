@@ -39,16 +39,18 @@
         search: '',
         headers: [
           {
-            text: 'Dessert (100g serving)',
+            text: 'BanID',
             align: 'start',
             filterable: false,
             value: 'name',
           },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
+          { text: 'Date', value: 'calories' },
+          { text: 'Server', value: 'fat' },
+          { text: 'Offender', value: 'carbs' },
+          { text: 'Admin', value: 'protein' },
+          { text: 'Length', value: 'iron' },
+          { text: 'Reason', value: 'reason' },
+          { text: 'Unban Reason', value: 'unban_reason' }
         ],
         desserts: [
           {
