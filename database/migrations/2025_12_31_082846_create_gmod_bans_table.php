@@ -31,12 +31,12 @@ class CreateGmodBansTable extends Migration
             $table->timestamps();
 
             $table->foreign('SteamID')
-                  ->references('SteamID')
-                  ->on('abso_admin_users');
+                  ->references('steam_id')
+                  ->on('users');
 
             $table->foreign('Admin')
-                  ->references('SteamID')
-                  ->on('abso_admin_users');
+                  ->references('steam_id')
+                  ->on('users');
         });
     }
 
