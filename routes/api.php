@@ -19,6 +19,8 @@ Route::get("servers", "GmodServersController@retrieve");
 
 Route::get("communitystats", "CommunityStatsController@retrieve");
 
+Route::get("bans", "GmodBansController@getBans");
+
 Route::post("ban", "GmodBansController@addBan");
 
 

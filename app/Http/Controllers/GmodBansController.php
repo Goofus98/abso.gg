@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\GmodBans;
 class GmodBansController extends Controller
 {
-    
+    public function getBans(){
+        return GmodBans::all();
+    }
     public function addBan(Request $request)
     {
 
