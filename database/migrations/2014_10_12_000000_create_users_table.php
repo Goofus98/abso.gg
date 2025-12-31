@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name', 255);
             $table->string('rank', 30)->nullable();
             $table->unsignedInteger('playtime')->nullable();
+            $table->timestamp('last_steam_update')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

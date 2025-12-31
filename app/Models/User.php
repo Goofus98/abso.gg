@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use App\Services\SteamAPIService;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -46,4 +46,13 @@ class User extends Authenticatable
     protected $casts = [
         //'email_verified_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $steamapi = new SteamAPIService();
+            $user->name = $steamapi->getName($user->steam_id);
+            $user->last_steam_update = now();
+        });
+    }
 }

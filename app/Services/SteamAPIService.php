@@ -25,4 +25,21 @@ class SteamAPIService
 
         return $output;
     }
+
+    public function getName($steamids): string
+    {
+        $name = "";
+        try {
+            $steamPlayers = Http::get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' . env('STEAM_API_KEY') . '&steamids=' . $steamids)->throw()["response"]["players"];
+            foreach ($steamPlayers as $player){
+                $name = $player['personaname'];
+            }
+        } catch (Throwable $e) {
+            Log::warning('Steam API avatar fetch failed', [
+                'exception' => $e->getMessage()
+            ]);
+        }
+
+        return $name;
+    }
 }
