@@ -19,6 +19,9 @@ Route::get("servers", "GmodServersController@retrieve");
 
 Route::get("communitystats", "CommunityStatsController@retrieve");
 
+Route::post("ban", "GmodBansController@addBan");
+
+
 Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
     Route::post('gpshop/auction-item', "GPShopController@auction");
 });
