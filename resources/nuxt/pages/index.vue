@@ -100,7 +100,7 @@
             </v-col>
 
             <v-col cols="12" sm="6" md="4" v-for="(item, i) in gmServers" :key="i">
-                <v-card class="server-card" tile>
+                <v-card class="server-card" tile :href="`steam://connect/${item.ip}:${item.port}`">
                 <v-img src="/images/danktown.jpg" height="220">
                     <div class="server-overlay">
                     <div class="server-title">{{ item.name }}</div>
@@ -297,13 +297,13 @@ export default class Index extends Vue {
   left: 0;
   width: 100%;
   height: 10px;
-  background: radial-gradient(circle at 8px 5px, #000 3px, transparent 4px) repeat-x;
-  background-size: 16px 10px;
+  /*background: radial-gradient(circle at 8px 5px, #000 3px, transparent 4px) repeat-x;
+  background-size: 16px 10px;*/
   opacity: 0.6;
 }
 
-.stat-card::before { top: -10px; }
-.stat-card::after { bottom: -10px; }
+/*.stat-card::before { top: -10px; }*/
+/*.stat-card::after { bottom: -10px; }*/
 
 .stat-content {
   display: flex;

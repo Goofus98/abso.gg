@@ -42,8 +42,8 @@
 
     <!-- Right item (pushed using ml-auto) -->
     <v-toolbar-items class="ml-auto d-flex align-center">
-      <a href="/auth/steam" class="d-flex align-center">
-        <img class="steam-login" src="/images/steam_login.png" />
+      <a class="steam-login" href="/auth/steam">
+        <img class="steam-login-logo"src="/images/steam_login.png"/>
       </a>
     </v-toolbar-items>
 
@@ -89,7 +89,11 @@
   margin-top: 8px;
   margin-right: 20vw;
   display: block;
-  cursor: pointer;
 }
+
+.steam-login-logo {
+  height: 50px;
+}
+
 
 </style>
