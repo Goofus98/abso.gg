@@ -104,12 +104,17 @@
                 <v-img src="/images/danktown.jpg" height="220">
                     <div class="server-overlay">
                     <div class="server-title">{{ item.name }}</div>
-                    <div class="server-footer">
-                        <div class="server-left">
-                        <span class="status-dot"></span>
-                        <span>{{ item.ip }}:{{ item.port }}</span>
-                        </div>
-                        <div>{{ item.online }}/{{ item.max_online }}</div>
+                    <div class="server-bottom">
+                      <div class="server-map">
+                        {{ item.map }}
+                      </div>
+                      <div class="server-footer">
+                          <div class="server-left">
+                          <span class="status-dot"></span>
+                          <span>{{ item.ip }}:{{ item.port }}</span>
+                          </div>
+                          <div>{{ item.online }}/{{ item.max_online }}</div>
+                      </div>
                     </div>
                     </div>
                 </v-img>
@@ -365,11 +370,22 @@ export default class Index extends Vue {
   letter-spacing: 1px;
 }
 
+.server-bottom {
+  margin-top: auto;
+}
+
 .server-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
+  font-size: 13px;
+}
+
+.server-map {
+  text-align: center;
+  font-weight: 500;
+  margin: 0;
   font-size: 13px;
 }
 
