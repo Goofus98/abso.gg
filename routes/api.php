@@ -22,7 +22,7 @@ Route::get("communitystats", "CommunityStatsController@retrieve");
 Route::get("bans", "GmodBansController@getBans");
 
 Route::post("ban", "GmodBansController@addBan");
-
+Route::post("changereason", "GmodBansController@changeReason");
 
 Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
     Route::post('gpshop/auction-item', "GPShopController@auction");

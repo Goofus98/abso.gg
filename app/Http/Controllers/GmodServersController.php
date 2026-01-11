@@ -35,7 +35,7 @@ class GmodServersController extends Controller
     }
     public function register(Request $request)
     {
-        $server = GModServer::create([
+        $server = GmodServers::create([
             'name' => $request->input('name'),
             'ip' => $request->ip(),
             'api_key' => Str::random(64), // Generate the API key here

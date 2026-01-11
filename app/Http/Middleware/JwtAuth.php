@@ -8,8 +8,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Firebase\JWT\ExpiredException;
 
+use UnexpectedValueException;
 class JwtAuth
 {
     public function handle(Request $request, Closure $next)
@@ -25,9 +25,9 @@ class JwtAuth
 
             // Attach decoded token to the request for later use
             $request->attributes->add(['jwt_payload' => $decoded]);
-        } catch (LogicException $e) {
-            return response()->json(['error' => 'Invalid token'], 401);
-        } catch (UnexpectedValueException $e) {
+        } catch (\LogicException $e) {
+            return response()->json(['error' => 'Invalid environmental setup issue or malformed JWT keys'], 401);
+        } catch (UnexpectedValueException  $e) {
             return response()->json(['error' => 'Invalid token'], 401);
         }
 

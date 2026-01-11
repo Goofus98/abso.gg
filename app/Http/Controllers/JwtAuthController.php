@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\JwtService;
-
+use App\Models\User;
 class JwtAuthController extends Controller
 {
     public function issue(Request $request, JwtService $jwt)
@@ -15,7 +15,7 @@ class JwtAuthController extends Controller
         }
 
         $token = $jwt->issueToken($steamId);
-
+        User::firstOrCreate(['steam_id' => $steamId]);
         return response()->json([
             'token' => $token,
             'expires_in' => env('JWT_EXPIRATION', 2700),

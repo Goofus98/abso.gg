@@ -3,9 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\SoftDeletes;  
 
 class CreateGmodBansTable extends Migration
 {
+    use SoftDeletes;
     /**
      * Run the migrations.
      *
@@ -30,6 +32,7 @@ class CreateGmodBansTable extends Migration
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();
 
+            $table->softDeletes();
             $table->foreign('SteamID')
                   ->references('steam_id')
                   ->on('users');

@@ -24,4 +24,11 @@ class GmodBansController extends Controller
 
         return compact('ban');
     }
+
+    public function changeReason(Request $request)
+    {
+        $article = GmodBans::first();
+        $article->Reason = $request->Reason;
+        $article->save();
+    }
 }
