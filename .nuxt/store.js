@@ -18,6 +18,7 @@ let store = {};
   store.modules = store.modules || {}
 
   resolveStoreModules(require('../resources/nuxt/store/communityStats.ts'), 'communityStats.ts')
+  resolveStoreModules(require('../resources/nuxt/store/gmodBans.ts'), 'gmodBans.ts')
   resolveStoreModules(require('../resources/nuxt/store/gmodServers.ts'), 'gmodServers.ts')
 
   // If the environment supports hot reloading...
@@ -26,6 +27,7 @@ let store = {};
     // Whenever any Vuex module is updated...
     module.hot.accept([
       '../resources/nuxt/store/communityStats.ts',
+      '../resources/nuxt/store/gmodBans.ts',
       '../resources/nuxt/store/gmodServers.ts',
     ], () => {
       // Update `root.modules` with the latest definitions.

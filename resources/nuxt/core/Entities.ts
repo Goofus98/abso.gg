@@ -43,3 +43,73 @@ export class CommunityStat {
         return new CommunityStat(xf.player_count, xf.play_time, xf.discord_online_user_count);
     }
 }
+
+
+export interface GModBansTransfer {
+    id: number;
+    SteamID: string;
+    Reason: string;
+    Type: string;
+    Admin: string;
+    ExpiryDate: number;
+    Revoked: number;
+    Revoker: string;
+    RevokeReason: string;
+    revoked_at: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+}
+
+export class GModBans {
+    constructor(
+        public id: number,
+        public SteamID: string,
+        public Reason: string,
+        public Type: string,
+        public Admin: string,
+        public ExpiryDate: number,
+        public Revoked: number,
+        public Revoker: string,
+        public RevokeReason: string,
+        public revoked_at: string,
+        public created_at: string,
+        public updated_at: string,
+        public deleted_at: string
+    ){
+        this.created_at = new Intl.DateTimeFormat('en-US', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        }).format(new Date(this.created_at));
+    }
+
+    static hydrate(xf: GModBansTransfer): GModBans{
+        return new GModBans(xf.id, xf.SteamID, xf.Reason, xf.Type, xf.Admin, xf.ExpiryDate, xf.Revoked, xf.Revoker, xf.RevokeReason, xf.revoked_at, xf.created_at, xf.updated_at, xf.deleted_at);
+    }
+}
+
+export interface PaginationLinksTransfer {
+    url: string;
+    label: string;
+    active: boolean;
+}
+
+export class PaginationLinks {
+    constructor(
+        public url: string,
+        public label: string,
+        public active: boolean
+    ){}
+
+    static hydrate(xf: PaginationLinksTransfer): PaginationLinks{
+        return new PaginationLinks(xf.url, xf.label, xf.active);
+    }
+}
+
+
+
