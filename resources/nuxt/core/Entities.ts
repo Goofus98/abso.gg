@@ -59,6 +59,9 @@ export interface GModBansTransfer {
     created_at: string;
     updated_at: string;
     deleted_at: string;
+
+    banned_user_name: string;
+    admin_name: string;
 }
 
 export class GModBans {
@@ -75,7 +78,9 @@ export class GModBans {
         public revoked_at: string,
         public created_at: string,
         public updated_at: string,
-        public deleted_at: string
+        public deleted_at: string,
+        public banned_user_name: string,
+        public admin_name: string
     ){
         this.created_at = new Intl.DateTimeFormat('en-US', {
             day: 'numeric',
@@ -89,7 +94,7 @@ export class GModBans {
     }
 
     static hydrate(xf: GModBansTransfer): GModBans{
-        return new GModBans(xf.id, xf.SteamID, xf.Reason, xf.Type, xf.Admin, xf.ExpiryDate, xf.Revoked, xf.Revoker, xf.RevokeReason, xf.revoked_at, xf.created_at, xf.updated_at, xf.deleted_at);
+        return new GModBans(xf.id, xf.SteamID, xf.Reason, xf.Type, xf.Admin, xf.ExpiryDate, xf.Revoked, xf.Revoker, xf.RevokeReason, xf.revoked_at, xf.created_at, xf.updated_at, xf.deleted_at, xf.banned_user_name, xf.admin_name);
     }
 }
 
