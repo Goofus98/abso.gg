@@ -2,7 +2,7 @@
   <v-app>
     <navbar />
     <v-main>
-      <Nuxt keep-alive/>
+      <Nuxt/>
     </v-main>
   </v-app>
 </template>

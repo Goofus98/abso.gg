@@ -7,11 +7,12 @@ use App\Models\GmodBans;
 use App\Models\User;
 class GmodBansController extends Controller
 {
-    public function getBans(Request $request){
-        $perPage = 10;
+    public function getBans(Request $request)
+    {
+        $perPage = $request->input('items', 10);
 
         //if ($request->filled('search')) {
-            return GmodBans::search($request->search)
+        return GmodBans::search($request->search)
             ->query(function ($query) {
                 $query
                     // Join for banned user
@@ -19,7 +20,7 @@ class GmodBansController extends Controller
 
                     // Join for admin user
                     ->leftJoin('users as admin_user', 'gmod_bans.Admin', '=', 'admin_user.steam_id')
-                
+
                     ->select([
                         'gmod_bans.id',
                         'gmod_bans.SteamID',
@@ -41,10 +42,10 @@ class GmodBansController extends Controller
                     ->orderBy('gmod_bans.created_at', 'desc');
             })
             ->paginate($perPage);
-       // }
+        // }
 
         //return GmodBans::orderBy('created_at', 'desc')
-            //->paginate($perPage);
+        //->paginate($perPage);
     }
     public function addBan(Request $request)
     {

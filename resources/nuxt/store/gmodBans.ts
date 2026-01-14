@@ -88,12 +88,13 @@ export default class GModBansModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    async gotoPage(payload: { page: number; search?: string }) {
-        const { page, search } = payload;
+    async gotoPage(payload: { page: number; items: number; search?: string }) {
+        const { page, items, search } = payload;
         console.log(search);
         const data: ApiData = await $axios.$get('http://abso.gg/api/bans', {
             params: {
             page,
+            items,
             ...(search ? { search } : {}),
             },
         })

@@ -21,6 +21,8 @@
       :search="search"
       :server-items-length="totalItems"
       :page.sync="page"
+      :items-per-page.sync="itemsPerPage"
+      :footer-props="{'items-per-page-options':opts}"
       loading="true"
     >
       <template v-slot:footer.page-text>
@@ -83,22 +85,23 @@ import {sleep, sleepTrain, Killswitch} from "../core/Sleep";
   async fetch(this: Bans) {
     const GmodBansModule = getModule(GModBansModule, this.$store);
     const page = Number(this.$route.query.page) || 1;
+    const items = Number(this.$route.query.items) || 25;
     const text = String(this.$route.query.search || "");
-    await GmodBansModule.gotoPage({ page: page, search: text });
+    await GmodBansModule.gotoPage({ page: page, items: items, search: text });
     this.length = GmodBansModule.length;
     this.page = page;
     this.search = text;
+    this.itemsPerPage = items;
   },
 })
 export default class Bans extends Vue {
   page = 1;
   length = 1;
+  itemsPerPage = 25;
+  opts = [10,25,50,100];
   search = '';
   searchChangeKillswitch!: Killswitch;
-
-  created() {
-    this.searchChangeKillswitch = new Killswitch();
-  }
+  ignoreWatchers = false;
   headers = [
     {
       text: 'BanID',
@@ -115,13 +118,17 @@ export default class Bans extends Vue {
     { text: 'Reason', value: 'Reason', divider: true  },
     { text: 'Unban Reason', value: 'RevokeReason', divider: true  }
   ];
+
+
   options = {
     page: 1,
     itemsPerPage: 10,
     sortBy: [],
     sortDesc: [],
   };
-
+  created() {
+    this.searchChangeKillswitch = new Killswitch();
+  }
   mounted() {
     if (process.client) {
     }
@@ -131,41 +138,70 @@ export default class Bans extends Vue {
     this.searchChangeKillswitch.kill();
     await sleepTrain(async () => {
       await sleep(400, this.searchChangeKillswitch);
-      const GmodBansModule = getModule(GModBansModule, this.$store);
-      await GmodBansModule.gotoPage({ page: 1, search: text });
-      this.length = GmodBansModule.length;
+      await this.fetchData({ search: text, page: 1 });
+      this.ignoreWatchers = true;
       this.page = 1;
       this.$router.push({
         query: {
           ...this.$route.query,
           page: this.page.toString(),
+          //items: this.itemsPerPage.toString(),
           search: text,
         },
       });
+      this.ignoreWatchers = false;
     });
   }
-
-  @Watch('$route.query.page')
-  async onPageQueryChanged(newPage: string | undefined) {
-      const page = Number(newPage) || 1;
-      if (page === this.page) return
-      const GmodBansModule = getModule(GModBansModule, this.$store);
-      await GmodBansModule.gotoPage({ page: page, search: this.search });
-      this.length = GmodBansModule.length;
-      this.page = page;
+  @Watch('itemsPerPage')
+  async onItemsPerPageChange(itemsPerPage: number) {
+      
+      await this.fetchData({ itemsPerPage: itemsPerPage });
+      this.ignoreWatchers = true;
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          items: itemsPerPage.toString(),
+        },
+      });
+      this.ignoreWatchers = false;
   }
   @Watch('page')
-  async fetchData(page: number) {
-      const GmodBansModule = getModule(GModBansModule, this.$store);
-      await GmodBansModule.gotoPage({ page: page, search: this.search });
-      this.length = GmodBansModule.length;
+  async onPageChange(page: number) {
+      await this.fetchData({ page: page });
+      this.ignoreWatchers = true;
       this.$router.push({
         query: {
           ...this.$route.query,
           page: page.toString(),
         },
       });
+      this.ignoreWatchers = false;
   }
+
+  @Watch('$route.query')
+  async onQueryChanged() {
+    if (this.ignoreWatchers) return;
+    const page = Number(this.$route.query.page) || 1;
+    const items = Number(this.$route.query.items) || 25;
+    const text = String(this.$route.query.search || "");
+    await this.fetchData({ page: page, itemsPerPage: items, search: text });
+  }
+  async fetchData(options: {
+    page?: number;
+    itemsPerPage?: number;
+    search?: string;
+  } = {}) {
+    const GmodBansModule = getModule(GModBansModule, this.$store);
+
+    await GmodBansModule.gotoPage({
+      page: options.page ?? this.page,
+      items: options.itemsPerPage ?? this.itemsPerPage,
+      search: options.search ?? this.search,
+    });
+
+    this.length = GmodBansModule.length;
+  }
+
    /*onSearchInput(value: string) {
     this.search = value
     this.onSearchDebounced()

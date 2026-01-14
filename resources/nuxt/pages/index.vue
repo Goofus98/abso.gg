@@ -1,6 +1,6 @@
 <template>
 
-  <v-container fluid id="dash-container">
+  <v-container fluid id="dash-container" keep-alive>
     <div class="carousel-wrapper">
       <v-carousel
         cycle
