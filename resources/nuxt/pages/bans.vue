@@ -35,7 +35,7 @@
     <template v-slot:item.SteamID="{ item }">
       <div class="d-flex align-center">
         <v-avatar size="32" class="mr-2">
-          <v-img src="/images/avatar.png" />
+          <v-img :src="item.banned_user_avatar" />
         </v-avatar>
 
         <div>

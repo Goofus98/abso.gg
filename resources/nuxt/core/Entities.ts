@@ -60,6 +60,11 @@ export interface GModBansTransfer {
     updated_at: string;
     deleted_at: string;
 
+    banned_user_avatar: string;
+    admin_user_avatar: string;
+    banned_user_avatar_frame: string;
+    admin_user_avatar_frame: string;
+
     banned_user_name: string;
     admin_name: string;
 }
@@ -79,6 +84,10 @@ export class GModBans {
         public created_at: string,
         public updated_at: string,
         public deleted_at: string,
+        public banned_user_avatar: string,
+        public admin_user_avatar: string,
+        public banned_user_avatar_frame: string,
+        public admin_user_avatar_frame: string,
         public banned_user_name: string,
         public admin_name: string
     ){
@@ -94,7 +103,7 @@ export class GModBans {
     }
 
     static hydrate(xf: GModBansTransfer): GModBans{
-        return new GModBans(xf.id, xf.SteamID, xf.Reason, xf.Type, xf.Admin, xf.ExpiryDate, xf.Revoked, xf.Revoker, xf.RevokeReason, xf.revoked_at, xf.created_at, xf.updated_at, xf.deleted_at, xf.banned_user_name, xf.admin_name);
+        return new GModBans(xf.id, xf.SteamID, xf.Reason, xf.Type, xf.Admin, xf.ExpiryDate, xf.Revoked, xf.Revoker, xf.RevokeReason, xf.revoked_at, xf.created_at, xf.updated_at, xf.deleted_at, xf.banned_user_avatar, xf.admin_user_avatar, xf.banned_user_avatar_frame, xf.admin_user_avatar_frame,  xf.banned_user_name, xf.admin_name);
     }
 }
 

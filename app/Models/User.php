@@ -8,9 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Services\SteamAPIService;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    //static SteamAPIService $steamapi = SteamAPIService();
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +55,20 @@ class User extends Authenticatable
     {
         static::creating(function ($user) {
             $steamapi = new SteamAPIService();
-            $user->name = $steamapi->getName($user->steam_id);
+            $info = $steamapi->getName($user->steam_id);
+            $user->name = $info['nick'];
+            $image = Http::get($info['avatar'])->body();
+            $path = 'avatar/' . $user->steam_id . '.jpg';
+            Storage::disk('public')->put($path, $image);
+            $user->avatar_url = Storage::disk('public')->url($path);
+
+            $frameInfo = $steamapi->getAvatarFrame($user->steam_id);
+            if ($frameInfo["id"] != "") {
+                $image = Http::get($frameInfo["url"])->body();
+                $path = 'frames/' . $frameInfo["id"] . '.png';
+                Storage::disk('public')->put($path, $image);
+                $user->avatar_frame = Storage::disk('public')->url($path);
+            }
             $user->last_steam_update = now();
         });
     }

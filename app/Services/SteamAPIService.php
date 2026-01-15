@@ -26,13 +26,15 @@ class SteamAPIService
         return $output;
     }
 
-    public function getName($steamids): string
+    public function getName($steamids): array
     {
         $name = "";
+        $avatar = "";
         try {
             $steamPlayers = Http::get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' . env('STEAM_API_KEY') . '&steamids=' . $steamids)->throw()["response"]["players"];
             foreach ($steamPlayers as $player){
                 $name = $player['personaname'];
+                $avatar = $player['avatarfull'];
             }
         } catch (Throwable $e) {
             Log::warning('Steam API avatar fetch failed', [
@@ -40,6 +42,24 @@ class SteamAPIService
             ]);
         }
 
-        return $name;
+        return array('nick' => $name, 'avatar' => $avatar);
+    }
+
+    public function getAvatarFrame($steamids) {
+        $path = 'https://api.steampowered.com/IPlayerService/GetProfileItemsEquipped/v1/?key=' . env('STEAM_API_KEY') . '&steamid='. $steamids;
+        $frameURL = "";
+        $id = "";
+        try {
+            $equippedProfileItems = Http::get($path )->throw()["response"];
+
+            $frameURL = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/" . $equippedProfileItems["avatar_frame"]["image_small"];
+            $id = $equippedProfileItems["avatar_frame"]["communityitemid"];
+        } catch (Throwable $e) {
+            Log::warning('Steam API avatar fetch failed', [
+                'exception' => $e->getMessage()
+            ]);
+        }
+
+        return array('url' => $frameURL, 'id' => $id);
     }
 }

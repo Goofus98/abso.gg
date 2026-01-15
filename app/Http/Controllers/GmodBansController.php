@@ -36,6 +36,10 @@ class GmodBansController extends Controller
                         'gmod_bans.updated_at',
                         'gmod_bans.deleted_at',
                         // Aliased user names
+                        'banned_user.avatar_url as banned_user_avatar',
+                        'admin_user.avatar_url as admin_user_avatar',
+                        'banned_user.avatar_frame as banned_user_avatar_frame',
+                        'admin_user.avatar_frame as admin_user_avatar_frame',
                         'banned_user.name as banned_user_name',
                         'admin_user.name as admin_name',
                     ])
