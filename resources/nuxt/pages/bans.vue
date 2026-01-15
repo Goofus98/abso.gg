@@ -2,19 +2,15 @@
   <v-container fluid id="bans-container">
     <v-card-title>
       <v-text-field
-        v-model="search"
+        :value="search"
+        @input="searchChanged"
+        label="Search bans"
         append-icon="mdi-magnify"
-        label="Search"
         single-line
         hide-details
-      ></v-text-field>
+        clearable
+      />
     </v-card-title>
-    <v-text-field
-      :value="search"
-      @input="searchChanged"
-      label="Search bans"
-      clearable
-    />
     <v-data-table
       :headers="headers"
       :items="bans"
@@ -34,9 +30,15 @@
       </template>
     <template v-slot:item.SteamID="{ item }">
       <div class="d-flex align-center">
-        <v-avatar size="32" class="mr-2">
+        <Avatar
+          :avatar-href="item.banned_user_avatar"
+          :frame-href="item.banned_user_avatar_frame"
+          size="42"
+        />
+        <!--  <v-avatar size="32" class="mr-2">
+
           <v-img :src="item.banned_user_avatar" />
-        </v-avatar>
+        </v-avatar>-->
 
         <div>
           <div class="font-weight-medium">{{ item.banned_user_name }}</div>
@@ -49,10 +51,6 @@
 
     <template v-slot:item.ExpiryDate="{ item }">
       <div class="d-flex align-center">
-        <v-avatar size="32" class="mr-2">
-          <v-img src="/images/hourglass.png" />
-        </v-avatar>
-
         <div>
           <div class="font-weight-medium">{{ formattedTime(item.ExpiryDate) }}</div>
         </div>
@@ -102,6 +100,7 @@ export default class Bans extends Vue {
   search = '';
   searchChangeKillswitch!: Killswitch;
   ignoreWatchers = false;
+
   headers = [
     {
       text: 'BanID',
@@ -134,10 +133,11 @@ export default class Bans extends Vue {
     }
   }
 
+
   async searchChanged(text: string) {
     this.searchChangeKillswitch.kill();
     await sleepTrain(async () => {
-      await sleep(400, this.searchChangeKillswitch);
+      await sleep(500, this.searchChangeKillswitch);
       await this.fetchData({ search: text, page: 1 });
       this.ignoreWatchers = true;
       this.page = 1;

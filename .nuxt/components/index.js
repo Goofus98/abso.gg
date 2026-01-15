@@ -1,3 +1,4 @@
+export { default as Avatar } from '../../resources/nuxt/components/avatar.vue'
 export { default as Navbar } from '../../resources/nuxt/components/navbar.vue'
 
 // nuxt/nuxt.js#8607

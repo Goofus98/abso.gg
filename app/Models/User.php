@@ -64,10 +64,12 @@ class User extends Authenticatable
 
             $frameInfo = $steamapi->getAvatarFrame($user->steam_id);
             if ($frameInfo["id"] != "") {
-                $image = Http::get($frameInfo["url"])->body();
+                /*$image = Http::get($frameInfo["url"])->body();
                 $path = 'frames/' . $frameInfo["id"] . '.png';
                 Storage::disk('public')->put($path, $image);
-                $user->avatar_frame = Storage::disk('public')->url($path);
+                $user->avatar_frame = Storage::disk('public')->url($path);*/
+
+                $user->avatar_frame = $frameInfo["url"];
             }
             $user->last_steam_update = now();
         });

@@ -1,4 +1,7 @@
 {
+  "Avatar": {
+    "description": "Auto imported from components/avatar.vue"
+  },
   "Navbar": {
     "description": "Auto imported from components/navbar.vue"
   }
