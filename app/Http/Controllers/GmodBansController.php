@@ -68,8 +68,15 @@ class GmodBansController extends Controller
 
     public function changeReason(Request $request)
     {
-        $article = GmodBans::first();
-        $article->Reason = $request->Reason;
-        $article->save();
+        $data = $request->validate([
+            'banID' => 'required|integer|min:1',
+            'newReason' => 'required|string|max:255',
+        ]);
+
+        $ban = GmodBans::findOrFail($data['banID']);
+        $ban->Reason = $data['newReason'];
+        $ban->save();
+
+        return response()->json(['success' => true]);
     }
 }

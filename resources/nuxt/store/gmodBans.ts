@@ -17,7 +17,9 @@ interface ApiData {
     per_page: number;
     links: PaginationLinksTransfer[];
 }
-
+interface SuccessData {
+    success: boolean;
+}
 interface ServerPOJO {
     id: number;
     name: string;
@@ -90,7 +92,6 @@ export default class GModBansModule extends VuexModule {
     @Action({ rawError: true })
     async gotoPage(payload: { page: number; items: number; search?: string }) {
         const { page, items, search } = payload;
-        console.log(search);
         const data: ApiData = await $axios.$get('http://abso.gg/api/bans', {
             params: {
             page,
@@ -105,4 +106,17 @@ export default class GModBansModule extends VuexModule {
         this.setBans(bans);
         this.setLinks(links);
     }
+
+    @Action({ rawError: true })
+    async changeBanReason(payload: { banID: number; newReason: string }) {
+        const { banID, newReason } = payload;
+
+        const data: SuccessData = await $axios.$post('http://abso.gg/api/changereason', {
+            banID,
+            newReason
+        });
+
+        return data.success;
+    }
+
 }
