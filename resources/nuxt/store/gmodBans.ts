@@ -108,12 +108,12 @@ export default class GModBansModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    async changeBanReason(payload: { banID: number; newReason: string }) {
-        const { banID, newReason } = payload;
+    async updateBan(payload: { banID: number; Reason?: string; ExpiryDate?: number }) {
+        const { banID, Reason, ExpiryDate } = payload;
 
-        const data: SuccessData = await $axios.$post('http://abso.gg/api/changereason', {
-            banID,
-            newReason
+        const data: SuccessData = await $axios.$patch(`http://abso.gg/api/ban-update/${banID}`, {
+            Reason,
+            ExpiryDate
         });
 
         return data.success;

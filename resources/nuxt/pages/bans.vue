@@ -185,9 +185,9 @@ export default class Bans extends Vue {
     }
     const GmodBansModule = getModule(GModBansModule, this.$store);
 
-    this.success = await GmodBansModule.changeBanReason({
+    this.success = await GmodBansModule.updateBan({
       banID: this.EditingBanID,
-      newReason: this.bannedReason
+      Reason: this.bannedReason
     });
 
     this.bannedReason = '';

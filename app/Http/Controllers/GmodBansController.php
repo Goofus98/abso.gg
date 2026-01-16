@@ -79,4 +79,17 @@ class GmodBansController extends Controller
 
         return response()->json(['success' => true]);
     }
+    public function update(Request $request, GmodBans $ban)
+    {
+        //$this->authorize('update', $ban);
+
+        $data = $request->validate([
+            'Reason' => 'sometimes|string|max:255',
+            'ExpiryDate' => 'sometimes|integer|min:0|max:2147483647',
+        ]);
+
+        $ban->update($data);
+
+        return response()->json(['success' => true]);
+    }
 }
