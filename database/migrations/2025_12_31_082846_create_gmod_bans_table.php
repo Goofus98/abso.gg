@@ -34,7 +34,6 @@ class CreateGmodBansTable extends Migration
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();
 
-            $table->softDeletes();
             $table->foreign('SteamID')
                   ->references('steam_id')
                   ->on('users');
@@ -42,6 +41,12 @@ class CreateGmodBansTable extends Migration
             $table->foreign('Admin')
                   ->references('steam_id')
                   ->on('users');
+
+            $table->index('SteamID');
+            $table->index('Admin');
+            $table->index('created_at');
+
+            $table->softDeletes();
         });
     }
 

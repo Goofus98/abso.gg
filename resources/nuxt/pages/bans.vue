@@ -4,7 +4,7 @@
       <v-text-field :value="search" @input="searchChanged" label="Search bans" append-icon="mdi-magnify" single-line
         hide-details clearable />
     </v-card-title>
-    <v-data-table :headers="headers" :items="bans" :search="search" :server-items-length="totalItems" :page.sync="page"
+    <v-data-table :headers="headers" :items="bans" :search="search" :server-items-length="totalItems" :page.sync="page" :mobile-breakpoint="0"
       :items-per-page.sync="itemsPerPage" :footer-props="{ 'items-per-page-options': opts }">
       <template v-slot:footer.page-text>
         <v-pagination v-model="page" class="my-4" :length="length"></v-pagination>
@@ -258,8 +258,6 @@ export default class Bans extends Vue {
     this.searchChangeKillswitch.kill();
     await sleepTrain(async () => {
       await sleep(500, this.searchChangeKillswitch);
-      await this.fetchData({ search: text, page: 1 });
-      this.ignoreWatchers = true;
       this.page = 1;
       this.$router.push({
         query: {
@@ -269,42 +267,39 @@ export default class Bans extends Vue {
           search: text,
         },
       });
-      this.ignoreWatchers = false;
     });
   }
   @Watch('itemsPerPage')
-  async onItemsPerPageChange(itemsPerPage: number) {
-
-    await this.fetchData({ itemsPerPage: itemsPerPage });
-    this.ignoreWatchers = true;
+  onItemsPerPageChange(itemsPerPage: number) {
     this.$router.push({
       query: {
         ...this.$route.query,
         items: itemsPerPage.toString(),
       },
     });
-    this.ignoreWatchers = false;
   }
   @Watch('page')
-  async onPageChange(page: number) {
-    await this.fetchData({ page: page });
-    this.ignoreWatchers = true;
+  onPageChange(page: number) {
     this.$router.push({
       query: {
         ...this.$route.query,
         page: page.toString(),
       },
     });
-    this.ignoreWatchers = false;
   }
 
-  @Watch('$route.query')
+  @Watch('$route.query', { immediate: true, deep: true })
   async onQueryChanged() {
-    if (this.ignoreWatchers) return;
     const page = Number(this.$route.query.page) || 1;
     const items = Number(this.$route.query.items) || 25;
     const text = String(this.$route.query.search || "");
-    await this.fetchData({ page: page, itemsPerPage: items, search: text });
+    this.itemsPerPage = items;
+    this.page = page;
+    await this.fetchData({
+      page,
+      itemsPerPage: items,
+      search: text,
+    });
   }
   async fetchData(options: {
     page?: number;

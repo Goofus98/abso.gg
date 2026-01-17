@@ -11,44 +11,78 @@ class GmodBansController extends Controller
     public function getBans(Request $request)
     {
         $perPage = $request->input('items', 10);
+        if ($request->filled('search')) {
+            return GmodBans::search($request->search)
+                ->query(function ($query) {
+                    $query
+                        ->join('users as banned_user', 'gmod_bans.SteamID', '=', 'banned_user.steam_id')
+                        ->leftJoin('users as admin_user', 'gmod_bans.Admin', '=', 'admin_user.steam_id')
 
-        $searchedBans = GmodBans::search($request->search)
-            ->query(function ($query) {
-                $query
-                    ->join('users as banned_user', 'gmod_bans.SteamID', '=', 'banned_user.steam_id')
-                    ->leftJoin('users as admin_user', 'gmod_bans.Admin', '=', 'admin_user.steam_id')
+                        ->select([
+                            'gmod_bans.id',
+                            'gmod_bans.SteamID',
+                            'gmod_bans.Reason',
+                            'gmod_bans.Type',
+                            'gmod_bans.Admin',
+                            'gmod_bans.ExpiryDate',
+                            'gmod_bans.Revoked',
+                            'gmod_bans.Revoker',
+                            'gmod_bans.RevokeReason',
+                            'gmod_bans.ReasonEdited',
+                            'gmod_bans.ExpiryDateEdited',
+                            'gmod_bans.revoked_at',
+                            'gmod_bans.created_at',
+                            'gmod_bans.updated_at',
+                            'gmod_bans.deleted_at',
 
-                    ->select([
-                        'gmod_bans.id',
-                        'gmod_bans.SteamID',
-                        'gmod_bans.Reason',
-                        'gmod_bans.Type',
-                        'gmod_bans.Admin',
-                        'gmod_bans.ExpiryDate',
-                        'gmod_bans.Revoked',
-                        'gmod_bans.Revoker',
-                        'gmod_bans.RevokeReason',
-                        'gmod_bans.ReasonEdited',
-                        'gmod_bans.ExpiryDateEdited',
-                        'gmod_bans.revoked_at',
-                        'gmod_bans.created_at',
-                        'gmod_bans.updated_at',
-                        'gmod_bans.deleted_at',
+                            'banned_user.avatar_url as banned_user_avatar',
+                            'admin_user.avatar_url as admin_user_avatar',
+                            'banned_user.avatar_frame as banned_user_avatar_frame',
+                            'admin_user.avatar_frame as admin_user_avatar_frame',
+                            'banned_user.name as banned_user_name',
+                            'admin_user.name as admin_name',
 
-                        'banned_user.avatar_url as banned_user_avatar',
-                        'admin_user.avatar_url as admin_user_avatar',
-                        'banned_user.avatar_frame as banned_user_avatar_frame',
-                        'admin_user.avatar_frame as admin_user_avatar_frame',
-                        'banned_user.name as banned_user_name',
-                        'admin_user.name as admin_name',
-                    ])
-                    ->orderBy('gmod_bans.created_at', 'desc');
-            })
-            ->paginate($perPage);
+                        ])
+                        ->orderBy('gmod_bans.created_at', 'desc');
+                })
+                ->paginate($perPage);
+        } else {
+            return GmodBans::query()
 
-        return $searchedBans;
+                ->join('users as banned_user', 'gmod_bans.SteamID', '=', 'banned_user.steam_id')
+                ->leftJoin('users as admin_user', 'gmod_bans.Admin', '=', 'admin_user.steam_id')
+
+                ->select([
+                    'gmod_bans.id',
+                    'gmod_bans.SteamID',
+                    'gmod_bans.Reason',
+                    'gmod_bans.Type',
+                    'gmod_bans.Admin',
+                    'gmod_bans.ExpiryDate',
+                    'gmod_bans.Revoked',
+                    'gmod_bans.Revoker',
+                    'gmod_bans.RevokeReason',
+                    'gmod_bans.ReasonEdited',
+                    'gmod_bans.ExpiryDateEdited',
+                    'gmod_bans.revoked_at',
+                    'gmod_bans.created_at',
+                    'gmod_bans.updated_at',
+                    'gmod_bans.deleted_at',
+
+                    'banned_user.avatar_url as banned_user_avatar',
+                    'admin_user.avatar_url as admin_user_avatar',
+                    'banned_user.avatar_frame as banned_user_avatar_frame',
+                    'admin_user.avatar_frame as admin_user_avatar_frame',
+                    'banned_user.name as banned_user_name',
+                    'admin_user.name as admin_name',
+
+                ])
+                ->orderBy('gmod_bans.created_at', 'desc')
+                ->paginate($perPage);
+        }
+
     }
-    
+
     public function addBan(Request $request)
     {
         $data = $this->validate($request, [
@@ -81,8 +115,8 @@ class GmodBansController extends Controller
     public function getAudits(Request $request, GmodBans $ban)
     {
         return $ban->audits()
-        //->where("event", "updated")
-        ->whereNotNull('new_values->Reason')->get();
+            //->where("event", "updated")
+            ->whereNotNull('new_values->Reason')->get();
     }
     public function update(Request $request, GmodBans $ban)
     {
