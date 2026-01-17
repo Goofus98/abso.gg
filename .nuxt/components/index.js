@@ -1,5 +1,5 @@
-export const Avatar = () => import('../../resources/nuxt/components/avatar.vue' /* webpackChunkName: "components/avatar" */).then(c => wrapFunctional(c.default || c))
-export const Navbar = () => import('../../resources/nuxt/components/navbar.vue' /* webpackChunkName: "components/navbar" */).then(c => wrapFunctional(c.default || c))
+export { default as Avatar } from '../../resources/nuxt/components/avatar.vue'
+export { default as Navbar } from '../../resources/nuxt/components/navbar.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {
