@@ -28,6 +28,8 @@ class CreateGmodBansTable extends Migration
             $table->boolean('Revoked')->default(false);
             $table->string('Revoker', 32)->nullable();
             $table->string('RevokeReason', 255)->nullable();
+            $table->boolean('ReasonEdited')->default(false);
+            $table->boolean('ExpiryDateEdited')->default(false);
 
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();

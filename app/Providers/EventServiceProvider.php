@@ -7,6 +7,8 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+use OwenIt\Auditing\Events\Audited;
+use App\Listeners\AuditedListener;
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommunityStats::class => [
             UpdateCommunityStats::class,
+        ],
+        Audited::class => [
+            AuditedListener::class,
         ],
     ];
 

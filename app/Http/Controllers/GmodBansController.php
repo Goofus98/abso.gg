@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\GmodBans;
@@ -11,14 +12,10 @@ class GmodBansController extends Controller
     {
         $perPage = $request->input('items', 10);
 
-        //if ($request->filled('search')) {
-        return GmodBans::search($request->search)
+        $searchedBans = GmodBans::search($request->search)
             ->query(function ($query) {
                 $query
-                    // Join for banned user
                     ->join('users as banned_user', 'gmod_bans.SteamID', '=', 'banned_user.steam_id')
-
-                    // Join for admin user
                     ->leftJoin('users as admin_user', 'gmod_bans.Admin', '=', 'admin_user.steam_id')
 
                     ->select([
@@ -31,11 +28,13 @@ class GmodBansController extends Controller
                         'gmod_bans.Revoked',
                         'gmod_bans.Revoker',
                         'gmod_bans.RevokeReason',
+                        'gmod_bans.ReasonEdited',
+                        'gmod_bans.ExpiryDateEdited',
                         'gmod_bans.revoked_at',
                         'gmod_bans.created_at',
                         'gmod_bans.updated_at',
                         'gmod_bans.deleted_at',
-                        // Aliased user names
+
                         'banned_user.avatar_url as banned_user_avatar',
                         'admin_user.avatar_url as admin_user_avatar',
                         'banned_user.avatar_frame as banned_user_avatar_frame',
@@ -46,11 +45,10 @@ class GmodBansController extends Controller
                     ->orderBy('gmod_bans.created_at', 'desc');
             })
             ->paginate($perPage);
-        // }
 
-        //return GmodBans::orderBy('created_at', 'desc')
-        //->paginate($perPage);
+        return $searchedBans;
     }
+    
     public function addBan(Request $request)
     {
         $data = $this->validate($request, [
@@ -78,6 +76,13 @@ class GmodBansController extends Controller
         $ban->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function getAudits(Request $request, GmodBans $ban)
+    {
+        return $ban->audits()
+        //->where("event", "updated")
+        ->whereNotNull('new_values->Reason')->get();
     }
     public function update(Request $request, GmodBans $ban)
     {

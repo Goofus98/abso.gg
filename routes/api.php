@@ -24,6 +24,7 @@ Route::get("bans", "GmodBansController@getBans");
 Route::post("ban", "GmodBansController@addBan");
 Route::post("changereason", "GmodBansController@changeReason");
 Route::patch('ban-update/{ban}', "GmodBansController@update");
+Route::get('ban-audits/{ban}', "GmodBansController@getAudits");
 
 Route::prefix('garrysmod')->middleware(['gmod.auth', 'jwt.auth'])->group(function () {
     Route::post('gpshop/auction-item', "GPShopController@auction");

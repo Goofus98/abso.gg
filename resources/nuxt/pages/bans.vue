@@ -45,20 +45,64 @@
         </div>
       </template>
       <template v-slot:item.Reason="{ item }">
-        <div class="d-flex align-center justify-space-between">
-          <div>
-            <div class="font-weight-medium">{{ item.Reason }}</div>
-          </div>
+        <div class="reason-cell">
+          <!-- Overlay label -->
+          <v-chip
+            x-small
+            v-if="item.ReasonEdited"
+            @click="viewReasonHistory(item.id)"
+          >
+            Edited
+          </v-chip>
 
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
+          <v-dialog
+            v-model="reasonHistoryDialog"
+            persistent
+            max-width="600px"
+            :retain-focus="false"
+          >
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Ban Reason History</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-textarea
+                    v-for="audit in audits"
+                    :key="audit.id"
+                    counter
+                    label="Reason"
+                    :value="audit.new_values.Reason"
+                    readonly
+                  />
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer />
+                <v-btn text @click="reasonHistoryDialog = false">
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Normal cell content -->
+          <div class="d-flex align-center justify-space-between">
+            <span class="reason-text">
+              {{ item.Reason }}
+            </span>
+
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+
             <v-list dense>
 
-              <v-dialog v-model="dialog" persistent max-width="600px">
+              <v-dialog v-model="dialog" persistent max-width="600px" :retain-focus="false">
                 <template v-slot:activator="{ on, attrs }">
 
                   <v-list-item v-bind="attrs" v-on="on" @click="editItem(item.id)">
@@ -88,9 +132,11 @@
               </v-dialog>
 
             </v-list>
-          </v-menu>
+            </v-menu>
+          </div>
         </div>
       </template>
+
 
     </v-data-table>
 
@@ -111,7 +157,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import GModBansModule from "../store/gmodBans";
-import debounce from 'lodash/debounce';
+import gmodBansAuditsModule from "../store/gmodBansAudits";
 import { sleep, sleepTrain, Killswitch } from "../core/Sleep";
 
 @Component({
@@ -139,6 +185,8 @@ export default class Bans extends Vue {
   dialog = false;
   success = false;
   EditingBanID = 1;
+
+  reasonHistoryDialog = false;
   headers = [
     {
       text: 'BanID',
@@ -163,9 +211,10 @@ export default class Bans extends Vue {
     sortBy: [],
     sortDesc: [],
   };
-  created() {
+  async created() {
     this.searchChangeKillswitch = new Killswitch();
   }
+
   mounted() {
     if (process.client) {
     }
@@ -179,6 +228,16 @@ export default class Bans extends Vue {
     this.bannedReason = text;
   }
 
+  async viewReasonHistory(id: number) {
+    const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
+    await GmodBansAuditsModule.getAudits({ banID: id});
+    this.reasonHistoryDialog = true;
+  }
+  
+  get audits(){
+    const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
+    return GmodBansAuditsModule.audits;
+  }
   async bannedReasonSave(){
     if (this.bannedReason == '') {
       return;
@@ -343,4 +402,20 @@ export default class Bans extends Vue {
 .v-data-footer__icons-after {
   display: none;
 }
+
+.reason-cell {
+  position: relative;
+}
+
+.edited-label {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #868686;
+  pointer-events: none;
+  z-index: 1;
+}
+
 </style>
