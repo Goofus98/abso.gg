@@ -55,38 +55,6 @@
             Edited
           </v-chip>
 
-          <v-dialog
-            v-model="reasonHistoryDialog"
-            persistent
-            max-width="600px"
-            :retain-focus="false"
-          >
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Ban Reason History</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-textarea
-                    v-for="audit in audits"
-                    :key="audit.id"
-                    counter
-                    label="Reason"
-                    :value="audit.new_values.Reason"
-                    readonly
-                  />
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer />
-                <v-btn text @click="reasonHistoryDialog = false">
-                  Close
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
           <!-- Normal cell content -->
           <div class="d-flex align-center justify-space-between">
             <span class="reason-text">
@@ -102,7 +70,7 @@
 
             <v-list dense>
 
-              <v-dialog v-model="dialog" persistent max-width="600px" :retain-focus="false">
+              <v-dialog v-model="dialog[item.id]" persistent max-width="600px" :retain-focus="false">
                 <template v-slot:activator="{ on, attrs }">
 
                   <v-list-item v-bind="attrs" v-on="on" @click="editItem(item.id)">
@@ -121,7 +89,7 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text @click="dialog = false">
+                    <v-btn text @click="dialog[item.id] = false">
                       Close
                     </v-btn>
                     <v-btn text @click="bannedReasonSave">
@@ -139,6 +107,40 @@
 
 
     </v-data-table>
+
+
+          <v-dialog
+            v-model="isViewingReasonHistory"
+            persistent
+            max-width="600px"
+            :retain-focus="false"
+          >
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Ban Reason History (ID: {{ ViewingBanID }})</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-textarea
+                    v-for="audit in audits"
+                    :key="audit.id"
+                    counter
+                    label="Reason"
+                    :value="audit.new_values.Reason"
+                    readonly
+                  />
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer />
+                <v-btn text @click="isViewingReasonHistory = false">
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
     <v-snackbar
     v-model="success"
@@ -182,11 +184,13 @@ export default class Bans extends Vue {
   bannedReason = '';
   searchChangeKillswitch!: Killswitch;
   ignoreWatchers = false;
-  dialog = false;
+  isViewingReasonHistory = false;
   success = false;
   EditingBanID = 1;
+  ViewingBanID = 1;
 
-  reasonHistoryDialog = false;
+  reasonHistoryDialog = {};
+  dialog = {};
   headers = [
     {
       text: 'BanID',
@@ -231,7 +235,9 @@ export default class Bans extends Vue {
   async viewReasonHistory(id: number) {
     const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
     await GmodBansAuditsModule.getAudits({ banID: id});
-    this.reasonHistoryDialog = true;
+
+    this.isViewingReasonHistory = true;
+    this.ViewingBanID = id;
   }
   
   get audits(){
@@ -250,8 +256,7 @@ export default class Bans extends Vue {
     });
 
     this.bannedReason = '';
-    this.dialog = false;
-
+    this.dialog[this.EditingBanID] = false;
   }
 
   async searchChanged(text: string) {
