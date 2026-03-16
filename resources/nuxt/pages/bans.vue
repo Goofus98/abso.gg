@@ -27,9 +27,30 @@
       </template>
 
       <template v-slot:item.ExpiryDate="{ item }">
-        <div class="d-flex align-center">
-          <div>
-            <div class="font-weight-medium">{{ formattedTime(item.ExpiryDate) }}</div>
+        <div class="reason-cell">
+          <!-- Overlay label -->
+          <v-chip x-small v-if="item.ExpiryDateEdited" @click="viewExipryHistory(item.id)">
+            Edited
+          </v-chip>
+          <div class="d-flex align-center justify-space-between">
+            <span class="reason-text">
+              {{ formattedTime(item.ExpiryDate) }}
+            </span>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list dense>
+
+                <v-list-item @click="editItem(item.id, bans.indexOf(item)); isEditingExpiryDate = true">
+                  <v-list-item-title>Edit</v-list-item-title>
+                </v-list-item>
+
+              </v-list>
+            </v-menu>
           </div>
         </div>
       </template>
@@ -66,7 +87,7 @@
 
               <v-list dense>
 
-                <v-list-item @click="editItem(item.id, bans.indexOf(item)); isEditingReasonHistory = true">
+                <v-list-item @click="editItem(item.id, bans.indexOf(item)); isEditingReason = true">
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
 
@@ -79,7 +100,96 @@
 
     </v-data-table>
 
-    <v-dialog v-model="isEditingReasonHistory" persistent max-width="600px" :retain-focus="false">
+    <v-dialog v-model="isEditingExpiryDate" persistent max-width="700px" :retain-focus="false">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Edit Ban Length</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+
+        <v-row align="center" justify="center">
+            <v-col cols="12" sm="6" md="2">
+              <h5>Years</h5>
+              <v-text-field
+                v-model="editingExpiryDateYears"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="2">
+              <h5>Months</h5>
+              <v-text-field
+                v-model="editingExpiryDateMonths"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="2">
+              <h5>Weeks</h5>
+              <v-text-field
+                v-model="editingExpiryDateWeeks"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="2">
+              <h5>Days</h5>
+              <v-text-field
+                v-model="editingExpiryDateDays"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="2">
+              <h5>Hours</h5>
+              <v-text-field
+                v-model="editingExpiryDateHours"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="2">
+              <h5>Mins</h5>
+              <v-text-field
+                v-model="editingExpiryDateMins"
+                density="compact"
+                style="width: 120px"
+                type="number"
+                outlined="true"
+                hide-details
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="isEditingExpiryDate = false">
+            Close
+          </v-btn>
+          <v-btn text @click="banLengthSave">
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="isEditingReason" persistent max-width="600px" :retain-focus="false">
       <v-card>
         <v-card-title>
           <span class="text-h5">Edit Ban Reason</span>
@@ -92,7 +202,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="isEditingReasonHistory = false">
+          <v-btn text @click="isEditingReason = false">
             Close
           </v-btn>
           <v-btn text @click="bannedReasonSave">
@@ -110,7 +220,7 @@
 
         <v-card-text>
           <v-container>
-            <v-textarea v-for="audit in audits" :key="audit.id" counter label="Reason" :value="audit.new_values.Reason"
+            <v-textarea v-for="audit in audits" v-if="audit.new_values?.Reason" :key="audit.id" counter label="Reason" :value="audit.new_values.Reason"
               readonly />
           </v-container>
         </v-card-text>
@@ -124,12 +234,32 @@
       </v-card>
     </v-dialog>
 
+      <v-dialog v-model="isViewingExpiryHistory" persistent max-width="600px" :retain-focus="false">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Ban Expiry History (ID: {{ ViewingBanID }})</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-textarea v-for="audit in audits" v-if="audit.new_values?.ExpiryDate" :key="audit.id" counter label="Expiry Date" :value="audit.new_values.ExpiryDate"
+              readonly />
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="isViewingExpiryHistory = false">
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-snackbar v-model="success" color="success" timeout="3000" top>
       Saved successfully!
     </v-snackbar>
   </v-container>
-
-
 </template>
 
 <script lang="ts">
@@ -161,13 +291,22 @@ export default class Bans extends Vue {
   bannedReason = '';
   searchChangeKillswitch!: Killswitch;
   ignoreWatchers = false;
-  isEditingReasonHistory = false;
+  isEditingReason = false;
+  isEditingExpiryDate = false;
   isViewingReasonHistory = false;
+  isViewingExpiryHistory = false;
   success = false;
   EditingBanID = 1;
   EditingBanIndex = 0;
   ViewingBanID = 1;
-
+  
+  shouldAdd = false;
+  editingExpiryDateYears = 0;
+  editingExpiryDateMonths = 0;
+  editingExpiryDateWeeks = 0;
+  editingExpiryDateDays = 0;
+  editingExpiryDateHours = 0;
+  editingExpiryDateMins = 0;
   headers = [
     {
       text: 'BanID',
@@ -219,9 +358,36 @@ export default class Bans extends Vue {
     this.ViewingBanID = id;
   }
 
+  async viewExipryHistory(id: number) {
+    const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
+    await GmodBansAuditsModule.getAudits({ banID: id });
+
+    this.isViewingExpiryHistory = true;
+    this.ViewingBanID = id;
+  }
+
   get audits() {
     const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
     return GmodBansAuditsModule.audits;
+  }
+
+  get expiryDelta() {
+    return this.editingExpiryDateYears * 525600 + this.editingExpiryDateMonths * 43800 + this.editingExpiryDateWeeks * 10080 + this.editingExpiryDateDays * 1440 + this.editingExpiryDateHours * 60 + this.editingExpiryDateMins
+  }
+  async banLengthSave() {
+    const GmodBansModule = getModule(GModBansModule, this.$store);
+
+    this.success = await GmodBansModule.updateBan({
+      banID: this.EditingBanID,
+      ExpiryDate: this.expiryDelta
+    });
+    this.editingExpiryDateYears = 0;
+    this.editingExpiryDateMonths = 0;
+    this.editingExpiryDateWeeks = 0;
+    this.editingExpiryDateDays = 0;
+    this.editingExpiryDateHours = 0;
+    this.editingExpiryDateMins = 0;
+    this.isEditingExpiryDate = false;
   }
   async bannedReasonSave() {
     if (this.bannedReason == '') {
@@ -235,7 +401,7 @@ export default class Bans extends Vue {
     });
 
     this.bannedReason = '';
-    this.isEditingReasonHistory = false;
+    this.isEditingReason = false;
   }
 
   async searchChanged(text: string) {
@@ -375,6 +541,7 @@ export default class Bans extends Vue {
   padding-bottom: 32px;
   padding-left: 12vw;
   padding-right: 12vw;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .v-data-footer__icons-before {

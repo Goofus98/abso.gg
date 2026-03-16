@@ -115,8 +115,11 @@ class GmodBansController extends Controller
     public function getAudits(Request $request, GmodBans $ban)
     {
         return $ban->audits()
-            //->where("event", "updated")
-            ->whereNotNull('new_values->Reason')->get();
+            ->where(function ($query) {
+                $query->whereNotNull('new_values->Reason')
+                    ->orWhereNotNull('new_values->ExpiryDate');
+            })
+            ->get();
     }
     public function update(Request $request, GmodBans $ban)
     {

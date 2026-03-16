@@ -54,8 +54,8 @@ html, body {
 
 main {
   background-image: url('/images/bg.svg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size: contain;
+
+  background-repeat: repeat;
 }
 </style>
