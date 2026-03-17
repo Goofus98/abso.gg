@@ -71,6 +71,7 @@ export interface GModBansTransfer {
 }
 
 export class GModBans {
+    public formatted_created_at: string = "";
     constructor(
         public id: number,
         public SteamID: string,
@@ -94,7 +95,7 @@ export class GModBans {
         public banned_user_name: string,
         public admin_name: string
     ){
-        this.created_at = new Intl.DateTimeFormat('en-US', {
+        this.formatted_created_at = new Intl.DateTimeFormat('en-US', {
             day: 'numeric',
             month: 'numeric',
             year: 'numeric',

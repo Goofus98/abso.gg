@@ -103,8 +103,9 @@
     <v-dialog v-model="isEditingExpiryDate" persistent max-width="700px" :retain-focus="false">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Edit Ban Length</span>
+          <span class="text-h5">Edit Ban Length (ID: {{ EditingBanID }})</span>
         </v-card-title>
+        <v-card-subtitle>{{banLengthHelperText}}</v-card-subtitle>
         <v-card-text>
           <v-container>
 
@@ -112,66 +113,72 @@
             <v-col cols="12" sm="6" md="2">
               <h5>Years</h5>
               <v-text-field
-                v-model="editingExpiryDateYears"
+                v-model.number="editingExpiryDateYears"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="2">
               <h5>Months</h5>
               <v-text-field
-                v-model="editingExpiryDateMonths"
+                v-model.number="editingExpiryDateMonths"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="2">
               <h5>Weeks</h5>
               <v-text-field
-                v-model="editingExpiryDateWeeks"
+                v-model.number="editingExpiryDateWeeks"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="2">
               <h5>Days</h5>
               <v-text-field
-                v-model="editingExpiryDateDays"
+                v-model.number="editingExpiryDateDays"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="2">
               <h5>Hours</h5>
               <v-text-field
-                v-model="editingExpiryDateHours"
+                v-model.number="editingExpiryDateHours"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="2">
               <h5>Mins</h5>
               <v-text-field
-                v-model="editingExpiryDateMins"
+                v-model.number="editingExpiryDateMins"
                 density="compact"
                 style="width: 120px"
                 type="number"
                 outlined="true"
+                oninput="if(this.value < 0) this.value = 0;"
                 hide-details
               ></v-text-field>
             </v-col>
@@ -180,7 +187,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="isEditingExpiryDate = false">
+          <v-btn text @click="banLengthClose">
             Close
           </v-btn>
           <v-btn text @click="banLengthSave">
@@ -192,7 +199,7 @@
     <v-dialog v-model="isEditingReason" persistent max-width="600px" :retain-focus="false">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Edit Ban Reason</span>
+          <span class="text-h5">Edit Ban Reason (ID: {{ EditingBanID }})</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -202,7 +209,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="isEditingReason = false">
+          <v-btn text @click="bannedReasonClose">
             Close
           </v-btn>
           <v-btn text @click="bannedReasonSave">
@@ -220,8 +227,44 @@
 
         <v-card-text>
           <v-container>
-            <v-textarea v-for="audit in audits" v-if="audit.new_values?.Reason" :key="audit.id" counter label="Reason" :value="audit.new_values.Reason"
-              readonly />
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Admin</th>
+                    <th class="text-left">New Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="audit in audits" :key="audit.id" v-if="audit.new_values?.Reason">
+                    <td class="d-flex align-center">
+                      <div v-if=!audit.user_id class="d-flex align-center">
+                        <v-avatar size="32" class="mr-2">
+                          <v-img src="/images/console.png" />
+                        </v-avatar>
+
+                        <div>
+                          <div class="font-weight-medium">CONSOLE</div>
+                        </div>
+                      </div>
+
+                      <div v-if=audit.user_id class="d-flex align-center">
+                        <Avatar :avatar-href="audit.banned_user_avatar" :frame-href="audit.banned_user_avatar_frame" size="42" />
+                        <div>
+                          <div class="font-weight-medium">{{ audit.user_name }}</div>
+                          <div class="text--secondary text-caption">
+                            {{ audit.SteamID }}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      {{ audit.new_values.Reason }}
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-container>
         </v-card-text>
 
@@ -307,6 +350,8 @@ export default class Bans extends Vue {
   editingExpiryDateDays = 0;
   editingExpiryDateHours = 0;
   editingExpiryDateMins = 0;
+
+  banLengthHelperText = "All 0 = Permanent Ban."
   headers = [
     {
       text: 'BanID',
@@ -315,7 +360,7 @@ export default class Bans extends Vue {
       value: 'id',
       divider: true
     },
-    { text: 'Date', value: 'created_at', divider: true },
+    { text: 'Date', value: 'formatted_created_at', divider: true },
     //{ text: 'Server', value: 'fat' },
     { text: 'Offender', value: 'SteamID', divider: true },
     { text: 'Admin', value: 'Admin', divider: true },
@@ -349,6 +394,41 @@ export default class Bans extends Vue {
     this.bannedReason = text;
   }
 
+  @Watch('editingExpiryDateYears')
+  @Watch('editingExpiryDateMonths')
+  @Watch('editingExpiryDateDays')
+  @Watch('editingExpiryDateWeeks')
+  @Watch('editingExpiryDateHours')
+  @Watch('editingExpiryDateMins')
+  onEditingExpiryDateYearsChange(val: number) {
+    this.updateBanLengthHelper();
+  }
+
+  updateBanLengthHelper() {
+    const delta = this.expiryDelta;
+    if (delta == 0) {
+      this.banLengthHelperText = "All 0 = Permanent Ban.";
+      return;
+    }
+    const date = new Date(this.editingBan.created_at);
+    date.setMinutes(date.getMinutes() + delta);
+    if (isNaN(date.getTime())) {
+      this.banLengthHelperText = 'Invalid date';
+      return;
+    }
+    this.banLengthHelperText = this.editingBan.banned_user_name + " will be unbanned on: " + new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(date);
+
+    if (delta == 2147483647) {
+      this.banLengthHelperText = this.banLengthHelperText + " (max ban length)"
+    }
+  }
 
   async viewReasonHistory(id: number) {
     const GmodBansAuditsModule = getModule(gmodBansAuditsModule, this.$store);
@@ -372,7 +452,17 @@ export default class Bans extends Vue {
   }
 
   get expiryDelta() {
-    return this.editingExpiryDateYears * 525600 + this.editingExpiryDateMonths * 43800 + this.editingExpiryDateWeeks * 10080 + this.editingExpiryDateDays * 1440 + this.editingExpiryDateHours * 60 + this.editingExpiryDateMins
+    return Math.min((this.editingExpiryDateYears * 525600)+ (this.editingExpiryDateMonths * 43800) + (this.editingExpiryDateWeeks * 10080) + (this.editingExpiryDateDays * 1440) + (this.editingExpiryDateHours * 60) + this.editingExpiryDateMins, 2147483647);
+  }
+
+  banLengthClose() {
+    this.editingExpiryDateYears = 0;
+    this.editingExpiryDateMonths = 0;
+    this.editingExpiryDateWeeks = 0;
+    this.editingExpiryDateDays = 0;
+    this.editingExpiryDateHours = 0;
+    this.editingExpiryDateMins = 0;
+    this.isEditingExpiryDate = false;
   }
   async banLengthSave() {
     const GmodBansModule = getModule(GModBansModule, this.$store);
@@ -388,6 +478,11 @@ export default class Bans extends Vue {
     this.editingExpiryDateHours = 0;
     this.editingExpiryDateMins = 0;
     this.isEditingExpiryDate = false;
+  }
+
+  bannedReasonClose() {
+    this.bannedReason = '';
+    this.isEditingReason = false;
   }
   async bannedReasonSave() {
     if (this.bannedReason == '') {
