@@ -238,7 +238,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="audit in audits" :key="audit.id" v-if="audit.new_values?.Reason">
-                    <td class="d-flex align-center">
+                    <td>
                       <div v-if=!audit.user_id class="d-flex align-center">
                         <v-avatar size="32" class="mr-2">
                           <v-img src="/images/console.png" />
@@ -250,11 +250,11 @@
                       </div>
 
                       <div v-if=audit.user_id class="d-flex align-center">
-                        <Avatar :avatar-href="audit.banned_user_avatar" :frame-href="audit.banned_user_avatar_frame" size="42" />
+                        <Avatar :avatar-href="audit.admin_user_avatar" :frame-href="audit.admin_user_avatar_frame" size="42" />
                         <div>
                           <div class="font-weight-medium">{{ audit.user_name }}</div>
                           <div class="text--secondary text-caption">
-                            {{ audit.SteamID }}
+                            {{ audit.user_id }}
                           </div>
                         </div>
                       </div>
@@ -262,7 +262,7 @@
                     <td>
                       {{ audit.formatted_created_at }}
                     </td>
-                    <td>
+                    <td class="reason-table-cell">
                       {{ audit.new_values.Reason }}
                     </td>
                   </tr>
@@ -289,8 +289,48 @@
 
         <v-card-text>
           <v-container>
-            <v-textarea v-for="audit in audits" v-if="audit.new_values?.ExpiryDate" :key="audit.id" counter label="Expiry Date" :value="audit.new_values.ExpiryDate"
-              readonly />
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Admin</th>
+                    <th class="text-left">Date</th>
+                    <th class="text-left">New Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="audit in audits" :key="audit.id" v-if="audit.new_values?.ExpiryDate">
+                    <td>
+                      <div v-if=!audit.user_id class="d-flex align-center">
+                        <v-avatar size="32" class="mr-2">
+                          <v-img src="/images/console.png" />
+                        </v-avatar>
+
+                        <div>
+                          <div class="font-weight-medium">CONSOLE</div>
+                        </div>
+                      </div>
+
+                      <div v-if=audit.user_id class="d-flex align-center">
+                        <Avatar :avatar-href="audit.admin_user_avatar" :frame-href="audit.admin_user_avatar_frame" size="42" />
+                        <div>
+                          <div class="font-weight-medium">{{ audit.user_name }}</div>
+                          <div class="text--secondary text-caption">
+                            {{ audit.user_id }}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      {{ audit.formatted_created_at }}
+                    </td>
+                    <td class="reason-table-cell">
+                      {{ formattedTime(audit.new_values.ExpiryDate) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-container>
         </v-card-text>
 
@@ -664,5 +704,10 @@ export default class Bans extends Vue {
   color: #868686;
   pointer-events: none;
   z-index: 1;
+}
+
+.reason-table-cell {
+  white-space: normal !important;
+  word-break: break-word;
 }
 </style>

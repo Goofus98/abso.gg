@@ -114,12 +114,25 @@ class GmodBansController extends Controller
 
     public function getAudits(Request $request, GmodBans $ban)
     {
-        return $ban->audits()
+        $audits = $ban->audits()
             ->where(function ($query) {
                 $query->whereNotNull('new_values->Reason')
                     ->orWhereNotNull('new_values->ExpiryDate');
             })
             ->get();
+        foreach ($audits as $audit) {
+            if ($audit["user_id"]) {
+                $user = User::find($audit["user_id"]);
+                
+                if ($user) {
+                    $audit["admin_user_name"] = $user->name;
+                    $audit["admin_user_avatar"] = $user->avatar_url;
+                    $audit["admin_user_avatar_frame"] = $user->avatar_frame;
+                }
+                
+            }
+        }
+        return $audits;
     }
     public function update(Request $request, GmodBans $ban)
     {

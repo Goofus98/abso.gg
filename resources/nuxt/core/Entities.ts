@@ -158,6 +158,9 @@ export interface GModBansAuditsTransfer {
     user_id: number;
     auditable_id: number;
     event: string;
+    admin_user_name: string;
+    admin_user_avatar: string;
+    admin_user_avatar_frame: string;
     old_values: GModBansAuditsValuesTransfer;
     new_values: GModBansAuditsValuesTransfer;
     created_at: string;
@@ -171,6 +174,9 @@ export class GModBansAudits {
         public user_id: number,
         public auditable_id: number,
         public event: string,
+        public admin_user_name: string,
+        public admin_user_avatar: string,
+        public admin_user_avatar_frame: string,
         public old_values: GModBansAuditsValuesTransfer,
         public new_values: GModBansAuditsValuesTransfer,
         public created_at: string,
@@ -188,7 +194,7 @@ export class GModBansAudits {
     }
 
     static hydrate(xf: GModBansAuditsTransfer): GModBansAudits{
-        return new GModBansAudits(xf.id, xf.user_id, xf.auditable_id, xf.event, new GModBansAuditsValues(xf.old_values.id, xf.old_values.Admin, xf.old_values.SteamID, xf.old_values.Reason, xf.old_values.ExpiryDate, xf.old_values.Type), new GModBansAuditsValues(xf.new_values.id, xf.new_values.Admin, xf.new_values.SteamID, xf.new_values.Reason, xf.new_values.ExpiryDate, xf.new_values.Type), xf.created_at, xf.updated_at);
+        return new GModBansAudits(xf.id, xf.user_id, xf.auditable_id, xf.event, xf.admin_user_name, xf.admin_user_avatar, xf.admin_user_avatar_frame, new GModBansAuditsValues(xf.old_values.id, xf.old_values.Admin, xf.old_values.SteamID, xf.old_values.Reason, xf.old_values.ExpiryDate, xf.old_values.Type), new GModBansAuditsValues(xf.new_values.id, xf.new_values.Admin, xf.new_values.SteamID, xf.new_values.Reason, xf.new_values.ExpiryDate, xf.new_values.Type), xf.created_at, xf.updated_at);
     }
 }
 
