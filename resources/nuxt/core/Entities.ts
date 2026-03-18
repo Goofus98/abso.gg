@@ -165,6 +165,7 @@ export interface GModBansAuditsTransfer {
 }
 
 export class GModBansAudits {
+    public formatted_created_at: string = "";
     constructor(
         public id: number,
         public user_id: number,
@@ -174,7 +175,17 @@ export class GModBansAudits {
         public new_values: GModBansAuditsValuesTransfer,
         public created_at: string,
         public updated_at: string
-    ){}
+    ){
+        this.formatted_created_at = new Intl.DateTimeFormat('en-US', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        }).format(new Date(this.created_at));
+    }
 
     static hydrate(xf: GModBansAuditsTransfer): GModBansAudits{
         return new GModBansAudits(xf.id, xf.user_id, xf.auditable_id, xf.event, new GModBansAuditsValues(xf.old_values.id, xf.old_values.Admin, xf.old_values.SteamID, xf.old_values.Reason, xf.old_values.ExpiryDate, xf.old_values.Type), new GModBansAuditsValues(xf.new_values.id, xf.new_values.Admin, xf.new_values.SteamID, xf.new_values.Reason, xf.new_values.ExpiryDate, xf.new_values.Type), xf.created_at, xf.updated_at);

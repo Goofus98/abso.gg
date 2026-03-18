@@ -232,6 +232,7 @@
                 <thead>
                   <tr>
                     <th class="text-left">Admin</th>
+                    <th class="text-left">Date</th>
                     <th class="text-left">New Reason</th>
                   </tr>
                 </thead>
@@ -257,6 +258,9 @@
                           </div>
                         </div>
                       </div>
+                    </td>
+                    <td>
+                      {{ audit.formatted_created_at }}
                     </td>
                     <td>
                       {{ audit.new_values.Reason }}
